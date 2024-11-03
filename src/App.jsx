@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button";
+import ManageServicePage from "@/pages/ManageServicePage";
 
 function App() {
   return (
-    <div className="h-screen bg-gray-500 flex items-center justify-center rounded-[1rem] m-[5rem]">
-      <Button>ban la j</Button>
+    <div className="w-full h-screen">
+      <ManageServicePage></ManageServicePage>
     </div>
   );
 }
