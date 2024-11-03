@@ -1,9 +1,12 @@
-import { Button } from "@/components/ui/button";
-
+import React from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 function App() {
   return (
-    <div className="h-screen bg-gray-500 flex items-center justify-center rounded-[1rem] m-[5rem]">
-      <Button>ban la j</Button>
+    <div>
+
+      <Footer />
+      <Header />
     </div>
   );
 }
