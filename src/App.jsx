@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button";
+import ClientView from "@/pages/clientView";
 
 function App() {
   return (
-    <div className="h-screen bg-gray-500 flex items-center justify-center rounded-[1rem] m-[5rem]">
-      <Button>ban la j</Button>
+    <div className="h-screen w-full">
+      <ClientView />
     </div>
   );
 }
