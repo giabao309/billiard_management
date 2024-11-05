@@ -3,9 +3,11 @@ import * as React from "react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import TableImage from "@/assets/table.png";
 import { useToast } from "@/hooks/use-toast";
+import { useGetTable } from "@/APIs/ServiceApi";
 
-export default function CardWithForm() {
+export default function TableCards() {
   const { toast } = useToast();
+  const tables = useGetTable();
 
   const handleCardClick = (table) => {
     toast({
@@ -14,14 +16,8 @@ export default function CardWithForm() {
     });
   };
 
-  const tables = [
-    { id: 1, name: "Bàn 1", status: "in-use" },
-    { id: 2, name: "Bàn 2", status: "available" },
-    { id: 3, name: "Bàn 3", status: "booked" },
-  ];
-
   return (
-    <div className="flex gap-4 mt-4">
+    <div className="flex gap-8 max-w-[85%] flex-wrap">
       {tables.map((table) => (
         <Card
           className=" bg-no-repeat bg-cover w-[10rem] h-[7.5rem] border-none flex items-center justify-center cursor-pointer"
