@@ -14,16 +14,12 @@ import ClientRoute from "@/routes/ClientRoute";
 
 // kiểm tra user đổ route
 function App() {
-  const [user, setUser] = useState("employee");
-
   return (
     <StrictMode>
       <Router>
         <Routes>
-          <Route path="/" element={<ClientRoute setUser={setUser} />} />
-          {user === "employee" && (
-            <Route path="/employee/*" element={<EmployeeRoute />} />
-          )}
+          <Route path="/" element={<ClientRoute />} />
+          <Route path="/employee/*" element={<EmployeeRoute />} />
         </Routes>
         <Toaster />
       </Router>
