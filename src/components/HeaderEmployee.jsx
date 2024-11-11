@@ -32,7 +32,9 @@ export default function Header() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem className="flex gap-x-4">
-              <NavigationMenuLink href="#booking">Thu Ngân</NavigationMenuLink>
+              <NavigationMenuLink href="/employee/cashier">
+                Thu Ngân
+              </NavigationMenuLink>
               <NavigationMenuLink href="#branches">
                 Thông tin cá nhân
               </NavigationMenuLink>

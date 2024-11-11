@@ -40,6 +40,15 @@ export default function TableStatus() {
           Đã đặt
         </label>
       </div>
+      <div className="flex items-center space-x-2">
+        <Checkbox id="maintenance" />
+        <label
+          htmlFor="maintenance"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          Bảo trì
+        </label>
+      </div>
     </div>
   );
 }

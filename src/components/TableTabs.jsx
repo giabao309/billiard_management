@@ -5,7 +5,10 @@ import TableCards from "@/components/TableCards";
 export default function TableTabs({ floors, tables }) {
   return (
     <Tabs defaultValue="all" className="flex flex-col">
-      <TabsList className="flex justify-around w-3/5 bg-[#5181F5] text-black mb-2">
+      <TabsList className="flex justify-around w-3/4 bg-[#5181F5] text-black mb-2">
+        <TabsTrigger key="all" className="w-full" value="all">
+          Tất cả
+        </TabsTrigger>
         {floors.map((floor) => (
           <TabsTrigger key={floor.id} className="w-full" value={floor.id}>
             {floor.name}

@@ -1,27 +1,77 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 export const useGetMenuItems = () => {
-  const items = [
-    { name: "Coca", price: 25000, category: "soda" },
-    { name: "Sting", price: 25000, category: "soda" },
-    { name: "Sinh tố bơ", price: 32000, category: "smoothie" },
-    { name: "Sinh tố dâu", price: 32000, category: "smoothie" },
-    { name: "Mì xào bò", price: 42000, category: "food" },
-    { name: "Cơm chiên dương châu", price: 42000, category: "food" },
-    { name: "Ba số anh", price: 35000, category: "cigarette" },
-    { name: "Sài gòn bạc", price: 20000, category: "cigarette" },
-    { name: "Bia 333", price: 18000, category: "beer" },
-    { name: "Tiger", price: 21000, category: "beer" },
-  ];
-  return items;
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchItems = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/services/items"
+      );
+      setItems(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  return { items, loading, error };
+};
+
+export const useGetMenuTypes = () => {
+  const [types, setTypes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchItems = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/services/types"
+      );
+      setTypes(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  return { types, loading, error };
 };
 
 export const useGetMenuCategories = () => {
-  const categories = [
-    { id: "all", name: "Tất cả" },
-    { id: "soda", name: "Nước ngọt" },
-    { id: "smoothie", name: "Sinh tố" },
-    { id: "food", name: "Thức ăn" },
-    { id: "cigarette", name: "Thuốc lá" },
-    { id: "beer", name: "Bia" },
-  ];
-  return categories;
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchItems = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/services/categories"
+      );
+      setCategories(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  return { categories, loading, error };
 };

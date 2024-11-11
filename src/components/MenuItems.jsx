@@ -25,14 +25,12 @@ export default function MenuItems({ items, categories }) {
   };
 
   return (
-    <div className="flex gap-6 max-w-[100%] flex-wrap">
+    <div className="flex gap-6 max-w-[85%] max-h-[65vh] flex-wrap overflow-auto">
       {filteredItems && filteredItems.length > 0 ? (
         filteredItems.map((item) => (
-          <Card className="w-[12rem] h-[15rem] flex flex-col justify-center items-center">
-            <CardHeader>
-              <CardTitle>{item.name}</CardTitle>
-            </CardHeader>
+          <Card className="w-[13rem] h-[15rem] flex flex-col justify-center items-center">
             <CardContent>
+              <span className="font-bold text-xl">{item.name}</span>
               <CardTitle>{item.price.toLocaleString()}</CardTitle>
             </CardContent>
             <CardFooter>

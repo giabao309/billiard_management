@@ -14,7 +14,6 @@ export const useGetBranches = () => {
 
 export const useGetFloor = () => {
   const tables = [
-    { name: "Tất cả", id: "all" },
     { name: "Tầng 1", id: "floor-1" },
     { name: "Tầng 2", id: "floor-2" },
     { name: "Tầng 3", id: "floor-3" },

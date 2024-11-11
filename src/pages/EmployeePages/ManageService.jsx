@@ -1,5 +1,9 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetMenuCategories, useGetMenuItems } from "@/APIs/ServiceApi";
+import {
+  useGetMenuTypes,
+  useGetMenuItems,
+  useGetMenuCategories,
+} from "@/APIs/ServiceApi";
 import { useGetTable } from "@/APIs/TablesApi";
 import { useGetFloor } from "@/APIs/BilliardApi";
 import TableTabs from "@/components/TableTabs";
@@ -17,8 +21,9 @@ export default function ManageService() {
   // const [selectedTable, setSelectedTable] = useState(null);
 
   //menu data
-  const categories = useGetMenuCategories();
-  const items = useGetMenuItems();
+  const { categories } = useGetMenuCategories();
+  const { types } = useGetMenuTypes();
+  const { items } = useGetMenuItems();
 
   return (
     <div className="flex min-h-[60vh] bg-gray-300">
@@ -36,7 +41,7 @@ export default function ManageService() {
             <TableTabs floors={floors} tables={tables} />
           </TabsContent>
           <TabsContent value="menu">
-            <MenuServices categories={categories} items={items} />
+            <MenuServices items={items} types={types} categories={categories} />
           </TabsContent>
         </Tabs>
       </div>

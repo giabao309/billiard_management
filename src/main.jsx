@@ -10,7 +10,7 @@ import {
 import { Toaster } from "@/components/ui/toaster";
 import EmployeeRoute from "@/routes/EmployeeRoute";
 import ClientRoute from "@/routes/ClientRoute";
-// import AdminRoute from "@/routes/AdminRoute";
+import AdminRoute from "@/routes/AdminRoute";
 
 // kiểm tra user đổ route
 function App() {
@@ -18,7 +18,8 @@ function App() {
     <StrictMode>
       <Router>
         <Routes>
-          <Route path="/" element={<ClientRoute />} />
+          <Route path="/*" element={<AdminRoute />} />
+          <Route path="/client" element={<ClientRoute />} />
           <Route path="/employee/*" element={<EmployeeRoute />} />
         </Routes>
         <Toaster />

@@ -44,7 +44,7 @@ export default function Login() {
           Đăng nhập
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[825px]">
         <form onSubmit={handleLogin}>
           <div>
             <label>Username:</label>
