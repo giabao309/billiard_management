@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import ClientLayout from "@/layouts/ClientLayout";
+import ClientLayout from "@/layouts/Client/ClientLayout";
 
-export default function EmployeeRoute() {
-  return (
-    <Routes>
-      <Route path="/client" element={<ClientLayout />} />
-    </Routes>
-  );
+export default function EmployeeRoute({ setUser }) {
+  return <ClientLayout />;
 }

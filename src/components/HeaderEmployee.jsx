@@ -23,7 +23,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export default function Header() {
   return (
     <header className="flex items-center justify-between px-8 py-4 bg-[#5181F5] text-white">
-      <div className="flex items-center gap-16">
+      <div className="flex items-center gap-x-16">
         <a href="#home" className="flex items-center cursor-pointer">
           <img src={Logo} alt="Logo" className="h-10 mr-3" />
           <span className="font-bold text-lg">Billiard Center</span>
@@ -32,39 +32,38 @@ export default function Header() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem className="flex gap-x-4">
-              <NavigationMenuLink href="#booking">Đặt bàn</NavigationMenuLink>
+              <NavigationMenuLink href="#booking">Thu Ngân</NavigationMenuLink>
               <NavigationMenuLink href="#branches">
-                Hệ thống chi nhánh
+                Thông tin cá nhân
               </NavigationMenuLink>
-              <NavigationMenuLink href="">Tuyển dụng</NavigationMenuLink>
-              <NavigationMenuLink href="">Tin tức</NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
       </div>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <Avatar>
-            <AvatarImage src={Anhdaidien} />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <UserRoundPen />
-            <span>Profile</span>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <LogOut />
-            <span>Log out</span>
-            <DropdownMenuShortcut></DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className="flex items-center gap-x-8">
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Avatar>
+              <AvatarImage src={Anhdaidien} />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Employee</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <UserRoundPen />
+              <span>Thông tin</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <LogOut />
+              <span>Đăng xuất</span>
+              <DropdownMenuShortcut></DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </header>
   );
 }

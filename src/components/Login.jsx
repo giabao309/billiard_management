@@ -11,12 +11,31 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
 
-export default function Login(onLogin) {
-  const [role, setRole] = useState("customer"); // Mặc định là khách hàng
+export default function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    onLogin(role); // Gọi hàm onLogin từ ClientLayout
+    try {
+      const response = await axios.post("http://localhost:5000/login", {
+        username,
+        password,
+      });
+      const { message, token, role } = response.data;
+      setMessage(message);
+      localStorage.setItem("token", token);
+
+      // Kiểm tra role và hiển thị thông báo nếu là "nhân viên"
+      if (role === "nhân viên") {
+        alert("Chào mừng nhân viên!");
+      } else {
+        alert(`Chào mừng ${role}!`);
+      }
+    } catch (error) {
+      setMessage(error.response?.data?.error || "Login failed");
+    }
   };
   return (
     <Dialog>
@@ -26,40 +45,28 @@ export default function Login(onLogin) {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <h2>Login</h2>
-        <label>
-          Chọn vai trò:
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="customer">Khách hàng</option>
-            <option value="employee">Nhân viên</option>
-          </select>
-        </label>
-        <button type="submit">Đăng nhập</button>
-        {/* <DialogHeader>
-          <DialogTitle>Đăng nhập</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="email" className="text-right">
-              Email
-            </Label>
-            <Input id="email" className="col-span-3" />
+        <form onSubmit={handleLogin}>
+          <div>
+            <label>Username:</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="password" className="text-right">
-              Password
-            </Label>
-            <Input id="password" type="password" className="col-span-3" />
+          <div>
+            <label>Password:</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
-        </div>
-        <DialogFooter>
-          <Button
-            className="bg-[#5181F5] text-white hover:text-black"
-            variant="secondary"
-          >
-            Đăng nhập
-          </Button>
-        </DialogFooter> */}
+          <button type="submit">Login</button>
+        </form>
+        <p>{message}</p>
       </DialogContent>
     </Dialog>
   );
