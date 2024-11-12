@@ -1,13 +1,14 @@
 import React from 'react';
 import { Phone, Clock } from 'lucide-react'; // 
+import Logo from "@/assets/logo.png";
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-100 py-8 text-gray-700">
-            <div className="container mx-auto px-8">
-                <div className="flex justify-center items-center mb-4">
-                    <img src="/path/to/logo.png" alt="Logo" className="h-12 mr-3" />
-                    <h2 className="text-2xl font-bold text-blue-600">HỆ THỐNG BILLIARDS CENTER</h2>
+        <footer className="bg-gray-100 py-8 text-gray-700 ">
+            <div className="container mx-auto px-8 p-10">
+                <div className="flex justify-center items-center mb-10">
+                    <img src={Logo} alt="Logo" className="h-12 mr-3" />
+                    <h2 className="text-2xl font-bold text-[#6ec1e4]">HỆ THỐNG BILLIARDS CENTER</h2>
                 </div>
 
 
