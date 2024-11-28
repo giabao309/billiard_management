@@ -1,4 +1,4 @@
-import React, { StrictMode, useState } from "react";
+import React, { StrictMode, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import {
@@ -14,13 +14,20 @@ import AdminRoute from "@/routes/AdminRoute";
 
 // kiểm tra user đổ route
 function App() {
+  const [user, setUser] = useState("1");
+
   return (
     <StrictMode>
       <Router>
         <Routes>
-          <Route path="/*" element={<AdminRoute />} />
-          <Route path="/client" element={<ClientRoute />} />
+          <Route path="/" element={<ClientRoute />} />
+          <Route path="/admin" element={<AdminRoute />} />
           <Route path="/employee/*" element={<EmployeeRoute />} />
+          {/* {user == "3" && <Route path="/" element={<ClientRoute />} />}
+          {user == "1" && <Route path="/admin" element={<AdminRoute />} />}
+          {user == "2" && (
+            <Route path="/employee/*" element={<EmployeeRoute />} />
+          )} */}
         </Routes>
         <Toaster />
       </Router>

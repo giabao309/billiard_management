@@ -1,3 +1,56 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+export const useGetAddress = () => {
+  const [address, setAddress] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchAddress = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/branches/address"
+      );
+      setAddress(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAddress();
+  }, []);
+
+  return { address, loading, error };
+};
+
+export const useGetDistrict = () => {
+  const [district, setDistrict] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchAddress = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/branches/district"
+      );
+      setDistrict(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAddress();
+  }, []);
+
+  return { district, loading, error };
+};
+
 export const useGetBranches = () => {
   const branches = [
     { id: 1, name: "Billiard Center Dương Quảng Hàm" },

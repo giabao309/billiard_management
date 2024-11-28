@@ -43,11 +43,7 @@ export function DialogDemo() {
             <Label htmlFor="email" className="text-gray-700 font-medium">
               Gmail
             </Label>
-            <Input
-              id="email"
-              value="Pedro Duarte"
-              className="border rounded-md p-2"
-            />
+            <Input id="email" className="border rounded-md p-2" />
           </div>
 
           {/* Name Field */}

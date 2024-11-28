@@ -31,7 +31,7 @@ export const useGetMenuTypes = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchItems = async () => {
+  const fetchTypes = async () => {
     try {
       const response = await axios.get(
         "http://localhost:5000/api/services/types"
@@ -45,7 +45,7 @@ export const useGetMenuTypes = () => {
   };
 
   useEffect(() => {
-    fetchItems();
+    fetchTypes();
   }, []);
 
   return { types, loading, error };
@@ -56,7 +56,7 @@ export const useGetMenuCategories = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchItems = async () => {
+  const fetchCategories = async () => {
     try {
       const response = await axios.get(
         "http://localhost:5000/api/services/categories"
@@ -70,7 +70,7 @@ export const useGetMenuCategories = () => {
   };
 
   useEffect(() => {
-    fetchItems();
+    fetchCategories();
   }, []);
 
   return { categories, loading, error };

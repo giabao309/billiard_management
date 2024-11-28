@@ -1,15 +1,6 @@
 import React from "react";
 import Logo from "@/assets/logo.png";
-import Anhdaidien from "@/assets/avatar.jpg";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuShortcut,
-} from "@/components/ui/dropdown-menu";
+
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -17,10 +8,8 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 
-import { LogOut, UserRoundPen } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
 import Login from "@/components/Login";
+import Register from "@/components/Register";
 
 export default function Header() {
   return (
@@ -46,29 +35,6 @@ export default function Header() {
       </div>
 
       <Login />
-
-      {/* <DropdownMenu>
-        <DropdownMenuTrigger>
-          <Avatar>
-            <AvatarImage src={Anhdaidien} />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <UserRoundPen />
-            <span>Profile</span>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <LogOut />
-            <span>Log out</span>
-            <DropdownMenuShortcut></DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu> */}
     </header>
   );
 }

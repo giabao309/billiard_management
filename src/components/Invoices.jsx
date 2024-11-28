@@ -19,6 +19,9 @@ export default function Invoices() {
           <span className="flex items-center justify-center h-12 w-[12rem] text-[#2A71B0] text-xl font-bold rounded-xl bg-[#E6F0FB]">
             Bàn 1 - Tầng 1
           </span>
+          <span className="flex items-center justify-center h-12 px-4 text-[#2A71B0] text-xl font-bold rounded-xl bg-[#E6F0FB]">
+            Chi Nhánh
+          </span>
         </div>
 
         <div className=" h-full">

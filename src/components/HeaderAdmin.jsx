@@ -20,13 +20,8 @@ import {
 import { LogOut, UserRoundPen } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function HeaderEmployee() {
-  const pathname = window.location.pathname;
-
-  const menuItems = [
-    { title: "Thu Ngân", href: "/employee/cashier" },
-    { title: "Thông tin cá nhân", href: "/employee/information" },
-  ];
+export default function Header() {
+  const data = localStorage.getItem("userData");
   return (
     <header className="flex items-center justify-between px-8 py-4 bg-[#5181F5] text-white">
       <div className="flex items-center gap-x-16">
@@ -38,14 +33,14 @@ export default function HeaderEmployee() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem className="flex gap-x-4">
-              {menuItems.map((item) => (
-                <NavigationMenuLink
-                  href={item.href}
-                  className={`${pathname === item.href ? "underline" : ""}`}
-                >
-                  {item.title}
-                </NavigationMenuLink>
-              ))}
+              <NavigationMenuLink href="#">
+                Quản lý chi nhánh
+              </NavigationMenuLink>
+              <NavigationMenuLink href="#">
+                Quản lý người dùng
+              </NavigationMenuLink>
+              <NavigationMenuLink href="#">Quản lý bàn</NavigationMenuLink>
+              <NavigationMenuLink href="#">Quản lý kho</NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
@@ -59,11 +54,11 @@ export default function HeaderEmployee() {
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>Employee</DropdownMenuLabel>
+            <DropdownMenuLabel>{data.roleId}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <UserRoundPen />
-              <span>Thông tin</span>
+              <a className="cursor-pointer">Thông tin</a>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
