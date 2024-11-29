@@ -19,32 +19,22 @@ import {
 
 import { LogOut, UserRoundPen } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useGetUserByID } from "@/APIs/UserApi";
 
-import { useGetEmployeeByID } from "@/APIs/UserApi";
-
-export default function HeaderEmployee() {
+export default function HeaderClientLogin() {
   const userID = localStorage.getItem("userID");
-  const { employee } = useGetEmployeeByID(userID);
+  const { user } = useGetUserByID(userID);
 
-  const getEmployee = (employee) => {
-    if (!employee) {
-      return <p>Loading</p>;
+  const getUser = (user) => {
+    if (!user) {
+      return <p>Loading...</p>;
     }
-    localStorage.setItem("branchName", employee.branch);
-    localStorage.setItem("branchID", employee.branch_id);
-    localStorage.setItem("employeeID", employee.employee_id);
-    return <p>{employee.name}</p>;
+    return <p>{user.name}</p>;
   };
 
-  const pathname = window.location.pathname;
-
-  const menuItems = [
-    { title: "Thu Ngân", href: "/employee/cashier" },
-    { title: "Thông tin cá nhân", href: "/employee/information" },
-  ];
   return (
     <header className="flex items-center justify-between px-8 py-4 bg-[#5181F5] text-white">
-      <div className="flex items-center gap-x-16">
+      <div className="flex items-center gap-16">
         <a href="#home" className="flex items-center cursor-pointer">
           <img src={Logo} alt="Logo" className="h-10 mr-3" />
           <span className="font-bold text-lg">Billiard Center</span>
@@ -53,18 +43,19 @@ export default function HeaderEmployee() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem className="flex gap-x-4">
-              {menuItems.map((item) => (
-                <NavigationMenuLink
-                  href={item.href}
-                  className={`${pathname === item.href ? "underline" : ""}`}
-                >
-                  {item.title}
-                </NavigationMenuLink>
-              ))}
+              <NavigationMenuLink href="#booking">Đặt bàn</NavigationMenuLink>
+              <NavigationMenuLink href="#branches">
+                Hệ thống chi nhánh
+              </NavigationMenuLink>
+              <NavigationMenuLink href="">Bảng Giá</NavigationMenuLink>
+              <NavigationMenuLink href="">
+                Thông tin về chúng tôi
+              </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
       </div>
+
       <div className="flex items-center gap-x-8">
         <DropdownMenu>
           <DropdownMenuTrigger>
@@ -74,11 +65,11 @@ export default function HeaderEmployee() {
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>{getEmployee(employee)}</DropdownMenuLabel>
+            <DropdownMenuLabel>{getUser(user)}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <UserRoundPen />
-              <span>Thông tin</span>
+              <a className="cursor-pointer">Thông tin</a>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>

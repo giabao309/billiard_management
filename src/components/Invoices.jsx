@@ -10,8 +10,12 @@ import { Button } from "@/components/ui/button";
 import InvoiceDetailCard from "@/components/InvoiceDetailCard";
 import { TbTransfer } from "react-icons/tb";
 import { FaMoneyBill } from "react-icons/fa";
+import { useGetEmployeeByID } from "@/APIs/UserApi";
 
 export default function Invoices() {
+  const branch = localStorage.getItem("branchName");
+  const branch_id = localStorage.getItem("branchID");
+
   return (
     <div>
       <div className="flex flex-col">
@@ -20,14 +24,14 @@ export default function Invoices() {
             Bàn 1 - Tầng 1
           </span>
           <span className="flex items-center justify-center h-12 px-4 text-[#2A71B0] text-xl font-bold rounded-xl bg-[#E6F0FB]">
-            Chi Nhánh
+            {branch} - {branch_id}
           </span>
         </div>
 
         <div className=" h-full">
           <div className="flex justify-between items-center h-12 gap-x-2">
             <span className="flex items-center justify-between px-2 h-10 w-[20rem] rounded-md bg-gray-200 ">
-              Khách hàng: Bảo <Search className="cursor-pointer" />
+              Khách hàng: ... <Search className="cursor-pointer" />
             </span>
             <span className="flex items-center justify-center h-10 w-[15rem] rounded-md bg-gray-200 ">
               Trạng thái: Chưa thanh toán

@@ -11,44 +11,30 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
-import axios from "axios"; // Đảm bảo bạn đã cài axios
+import { handleRegister } from "@/APIs/UserApi";
 
 export default function Register() {
   // State quản lý các trường nhập liệu
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [user_name, setUserName] = useState("");
+  const [numberphone, setNumberphone] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
 
   // Hàm đăng ký
-  const handleRegister = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(""); // Reset lỗi trước khi gửi
-
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/users/dangky",
-        {
-          email,
-          password,
-          fullName,
-          phoneNumber,
-        }
-      );
-
-      console.log("Đăng ký thành công", response.data);
-
-      // Có thể điều hướng đến trang đăng nhập hoặc trang khác
-      // window.location.href = "/login"; // Hoặc sử dụng React Router như navigate("/login")
-    } catch (err) {
-      console.error("Lỗi đăng ký", err);
-      setError("Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại.");
-    } finally {
-      setLoading(false);
-    }
+    handleRegister(
+      email,
+      user_name,
+      numberphone,
+      password,
+      setError,
+      setLoading,
+      setSuccess
+    );
   };
 
   return (
@@ -101,9 +87,9 @@ export default function Register() {
                 Họ và tên
               </Label>
               <Input
-                id="fullName"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                id="user_name"
+                value={user_name}
+                onChange={(e) => setUserName(e.target.value)}
                 className="col-span-3"
                 required
               />
@@ -115,8 +101,8 @@ export default function Register() {
               </Label>
               <Input
                 id="phoneNumber"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                value={numberphone}
+                onChange={(e) => setNumberphone(e.target.value)}
                 className="col-span-3"
                 required
               />
@@ -125,8 +111,15 @@ export default function Register() {
 
           {error && <p className="text-red-500 text-center">{error}</p>}
 
+          {success && <p className="text-green-500 text-center">{success}</p>}
+
           <DialogFooter>
-            <Button type="submit" className="bg-[#5181F5]" disabled={loading}>
+            <Button
+              type="submit"
+              className="bg-[#5181F5]"
+              onClick={onSubmit}
+              disabled={loading}
+            >
               {loading ? "Đang đăng ký..." : "Đăng ký"}
             </Button>
           </DialogFooter>

@@ -64,7 +64,7 @@ export default function ClientSection() {
               BẢNG GIÁ LIBRE & POOL
             </h3>
             <p className="text-5xl text-center text-red-600 font-bold mt-4">
-              40.000 <span className="text-lg">đ/h</span>
+              90.000 <span className="text-lg">đ/h</span>
             </p>
             <ul className="mt-4 space-y-2">
               <li className="flex items-center space-x-2">
@@ -98,10 +98,10 @@ export default function ClientSection() {
           {/* Carom Pricing Card */}
           <Card className="p-6 rounded-lg shadow-md border border-gray-200">
             <h3 className="text-xl font-bold text-center text-white bg-blue-600 p-2 rounded">
-              BẢNG GIÁ CAROM
+              BẢNG GIÁ SNOOKER
             </h3>
             <p className="text-5xl text-center text-red-600 font-bold mt-4">
-              60.000 <span className="text-lg">đ/h</span>
+              120.000 <span className="text-lg">đ/h</span>
             </p>
             <ul className="mt-4 space-y-2">
               <li className="flex items-center space-x-2">

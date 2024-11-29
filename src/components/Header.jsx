@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/navigation-menu";
 
 import Login from "@/components/Login";
-import Register from "@/components/Register";
 
 export default function Header() {
   return (

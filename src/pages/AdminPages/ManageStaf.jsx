@@ -37,8 +37,6 @@ export default function ManageStaf() {
   const { employees } = useGetEmployees();
   const { district } = useGetDistrict();
   const { address } = useGetAddress();
-  const role = localStorage.getItem("userRole");
-  const userID = localStorage.getItem("userID");
 
   return (
     <div className="w-full flex p-4">
@@ -90,10 +88,6 @@ export default function ManageStaf() {
             </Button>
           </div>
         </div>
-        <div>
-          <span>id: {userID}</span>
-          <span>role: {role}</span>
-        </div>
         {/* Table */}
         <Table className="bg-white rounded-lg shadow-sm">
           <TableHeader>
@@ -117,7 +111,9 @@ export default function ManageStaf() {
           <TableBody>
             {employees.map((employee) => (
               <TableRow className="hover:bg-gray-50">
-                <TableCell className="py-2 px-4">NV00{employee.id}</TableCell>
+                <TableCell className="py-2 px-4">
+                  NV00{employee.employee_id}
+                </TableCell>
                 <TableCell className="py-2 px-4">{employee.email}</TableCell>
                 <TableCell className="py-2 px-4">{employee.name}</TableCell>
                 <TableCell className="py-2 px-4">{employee.phone}</TableCell>

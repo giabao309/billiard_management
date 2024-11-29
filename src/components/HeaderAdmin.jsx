@@ -20,8 +20,19 @@ import {
 import { LogOut, UserRoundPen } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+import { useGetUserByID } from "@/APIs/UserApi";
+
 export default function Header() {
-  const data = localStorage.getItem("userData");
+  const userID = localStorage.getItem("userID");
+  const { user } = useGetUserByID(userID);
+
+  const getUser = (user) => {
+    if (!user) {
+      return <p>Loading...</p>;
+    }
+    return <p>{user.name}</p>;
+  };
+
   return (
     <header className="flex items-center justify-between px-8 py-4 bg-[#5181F5] text-white">
       <div className="flex items-center gap-x-16">
@@ -54,7 +65,7 @@ export default function Header() {
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>{data.roleId}</DropdownMenuLabel>
+            <DropdownMenuLabel>{getUser(user)}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <UserRoundPen />
