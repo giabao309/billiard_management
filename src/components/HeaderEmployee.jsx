@@ -28,7 +28,7 @@ export default function HeaderEmployee() {
 
   const getEmployee = (employee) => {
     if (!employee) {
-      return <p>Loading</p>;
+      return <p>Loading...</p>;
     }
     localStorage.setItem("branchName", employee.branch);
     localStorage.setItem("branchID", employee.branch_id);
