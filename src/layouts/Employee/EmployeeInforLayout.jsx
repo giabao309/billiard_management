@@ -3,12 +3,11 @@ import HeaderEmpoyee from "@/components/HeaderEmployee";
 import FooterEmployee from "@/components/FooterEmployee";
 import EmployeeInfor from "@/pages/EmployeePages/EmployeeInforPage";
 
-export default function CashierLayout() {
+export default function EmployerInfo() {
   return (
-    <div className="bg-[#5181F5] h-screen w-full">
+    <div className="h-screen">
       <HeaderEmpoyee />
       <EmployeeInfor />
-      <FooterEmployee />
     </div>
   );
 }

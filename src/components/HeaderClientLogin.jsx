@@ -43,7 +43,7 @@ export default function HeaderClientLogin() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem className="flex gap-x-4">
-              <NavigationMenuLink href="#booking">Đặt bàn</NavigationMenuLink>
+              <NavigationMenuLink href="/booking">Đặt bàn</NavigationMenuLink>
               <NavigationMenuLink href="#branches">
                 Hệ thống chi nhánh
               </NavigationMenuLink>
@@ -69,7 +69,7 @@ export default function HeaderClientLogin() {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <UserRoundPen />
-              <a className="cursor-pointer">Thông tin</a>
+              <a href="/client/informations" className="cursor-pointer">Thông tin</a>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>

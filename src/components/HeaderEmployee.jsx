@@ -78,7 +78,9 @@ export default function HeaderEmployee() {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <UserRoundPen />
-              <span>Thông tin</span>
+              <a href="/employee/information" className="cursor-pointer">
+                Thông tin
+              </a>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>

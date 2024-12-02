@@ -1,49 +1,69 @@
 import React from "react";
 import Pic from "@/assets/avatar.jpg";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useGetEmployeeByID } from "@/APIs/UserApi";
 
 export default function EmployeeInfor() {
   const userID = localStorage.getItem("userID");
   const { employee } = useGetEmployeeByID(userID);
 
-  const getEmployee = (employee) => {
-    if (!employee) {
-      return <p>Loading...</p>;
-    }
-    return (
-      <div className="flex flex-col gap-y-4 w-96">
-        <p className="p-2 border-[1px] rounded-md">{employee.email}</p>
-        <p className="p-2 border-[1px] rounded-md">{employee.name}</p>
-        <p className="p-2 border-[1px] rounded-md">{employee.phone}</p>
-        <p className="p-2 border-[1px] rounded-md">{employee.branch}</p>
-        <p className="p-2 border-[1px] rounded-md">{employee.shift}</p>
-        <p className="p-2 border-[1px] rounded-md">{employee.salary}</p>
-      </div>
-    );
-  };
-  const menuItems = [
-    { title: "Email" },
-    { title: "Tên" },
-    { title: "Số điện thoại" },
-    { title: "Chi nhánh làm việc" },
-    { title: "Ca làm việc" },
-    { title: "Lương" },
-  ];
+  if (!employee) {
+    return <p>Loading...</p>;
+  }
 
   return (
-    <div className="w-full bg-white flex flex-col gap-x-4 p-4">
-      <div className="w-[40rem] flex flex-col items-center justify-center">
-        <img src={Pic} className="w-32 h-32 rounded-full border-[10px]"></img>
-        <div className="w-full flex gap-x-4 p-4">
-          <div className="flex gap-x-16 justify-center items-center">
-            <div className="flex flex-col gap-y-4">
-              {menuItems.map((item) => (
-                <p className="p-2 border-[1px] border-white">{item.title}:</p>
-              ))}
+    <div className="flex flex-col gap-4 p-6 bg-gray-100">
+      {/* Header Section */}
+      <div className="flex items-center justify-between w-full bg-blue-500 p-4 rounded-t-lg">
+        <h1 className="text-white text-xl font-semibold">Employee Information</h1>
+      </div>
+
+      {/* Content Section */}
+      <div className="flex flex-col lg:flex-row gap-8 bg-white shadow-lg rounded-lg">
+        {/* Sidebar */}
+        <div className="w-full lg:w-1/3 p-6 border-r">
+          <div className="flex flex-col items-center gap-4">
+            <img
+              src={Pic}
+              alt="Avatar"
+              className="w-32 h-32 rounded-full border-4 border-blue-300"
+            />
+            <h2 className="text-xl font-semibold">{employee.name}</h2>
+            <p className="text-gray-500">{employee.branch}</p>
+          </div>
+        </div>
+
+        {/* Form Section */}
+        <div className="w-full lg:w-2/3 p-6 h-screen">
+          <h3 className="text-lg font-bold mb-4">Details</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-gray-600 mb-2">Email</label>
+              <Input defaultValue={employee.email} />
+            </div>
+            <div>
+              <label className="block text-gray-600 mb-2">Tên</label>
+              <Input defaultValue={employee.name} />
+            </div>
+            <div>
+              <label className="block text-gray-600 mb-2">Số điện thoại</label>
+              <Input defaultValue={employee.phone} />
+            </div>
+            <div>
+              <label className="block text-gray-600 mb-2">Chi nhánh làm việc</label>
+              <Input defaultValue={employee.branch} />
+            </div>
+            <div>
+              <label className="block text-gray-600 mb-2">Ca làm việc</label>
+              <Input defaultValue={employee.shift} />
+            </div>
+            <div>
+              <label className="block text-gray-600 mb-2">Lương</label>
+              <Input defaultValue={employee.salary} />
             </div>
           </div>
-          {getEmployee(employee)}
+          <Button className="mt-4">Update</Button>
         </div>
       </div>
     </div>
