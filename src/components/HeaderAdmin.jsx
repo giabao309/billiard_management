@@ -43,7 +43,10 @@ export default function Header() {
 
         <NavigationMenu>
           <NavigationMenuList>
-            <NavigationMenuItem className="flex gap-x-4">
+            <NavigationMenuItem className="flex gap-x-5">
+              <NavigationMenuLink href="#">
+                Tổng quan
+              </NavigationMenuLink>
               <NavigationMenuLink href="#">
                 Quản lý chi nhánh
               </NavigationMenuLink>
