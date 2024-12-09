@@ -4,21 +4,24 @@ import {
   useGetMenuItems,
   useGetMenuCategories,
 } from "@/APIs/ServiceApi";
-import { useGetTable } from "@/APIs/TablesApi";
-import { useGetFloor } from "@/APIs/BilliardApi";
+import { useGetTableByBranch } from "@/APIs/TablesApi";
+import { useGetFloorByBranch } from "@/APIs/BilliardApi";
 import TableTabs from "@/components/TableTabs";
 import MenuServices from "@/components/MenuServices";
 import Invoices from "@/components/Invoices";
+import { useState } from "react";
 
 export default function ManageService() {
+  const branch_id = localStorage.getItem("branchID");
+
   //floor data
-  const floors = useGetFloor();
+  const { floors } = useGetFloorByBranch(branch_id);
 
   //table data
-  const { tables } = useGetTable();
+  const { tables } = useGetTableByBranch(branch_id);
 
   //selected table
-  // const [selectedTable, setSelectedTable] = useState(null);
+  const [selectedTable, setSelectedTable] = useState("");
 
   //menu data
   const { categories } = useGetMenuCategories();
@@ -38,7 +41,11 @@ export default function ManageService() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="table">
-            <TableTabs floors={floors} tables={tables} />
+            <TableTabs
+              floors={floors}
+              tables={tables}
+              setSelectedTable={setSelectedTable}
+            />
           </TabsContent>
           <TabsContent value="menu">
             <MenuServices items={items} types={types} categories={categories} />
@@ -46,7 +53,7 @@ export default function ManageService() {
         </Tabs>
       </div>
       <div className="w-2/5 m-2 p-2 rounded-md bg-white">
-        <Invoices />
+        <Invoices selectedTable={selectedTable} />
       </div>
     </div>
   );

@@ -23,3 +23,50 @@ export const useGetTable = () => {
 
   return { tables, loading, error };
 };
+
+export const useGetTableByBranch = (branch_id) => {
+  const [tables, setTables] = useState([]);
+
+  useEffect(() => {
+    const fetchFloors = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/tables/branch",
+          { branch_id }
+        );
+        setTables(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchFloors();
+  }, [branch_id]);
+
+  return { tables };
+};
+
+export const useGetTableStatus = () => {
+  const [status, setStatus] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchStatus = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/tables/status"
+      );
+      setStatus(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStatus();
+  }, []);
+
+  return { status, loading, error };
+};

@@ -24,7 +24,7 @@ import { Label } from "@/components/ui/label";
 export function DialogDemo() {
   return (
     <Dialog className="p-8">
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button variant="outline">Edit Profile</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] rounded-lg shadow-lg border border-gray-200">

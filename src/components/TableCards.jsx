@@ -3,10 +3,11 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import TableImage from "@/assets/table.png";
 import { useToast } from "@/hooks/use-toast";
 
-export default function TableCards({ tables }) {
+export default function TableCards({ tables, setSelectedTable }) {
   const { toast } = useToast();
 
   const handleCardClick = (table) => {
+    setSelectedTable(table);
     toast({
       title: "Thông báo",
       description: `Đã chọn ${table.name} `,
@@ -18,11 +19,11 @@ export default function TableCards({ tables }) {
       {tables && tables.length > 0 ? (
         tables.map((table) => {
           let statusDot;
-          if (table.status === "Đang sử dụng") {
+          if (table.status_id === 2) {
             statusDot = "green";
-          } else if (table.status === "Đã đặt") {
+          } else if (table.status_id === 3) {
             statusDot = "red";
-          } else if (table.status === "Bảo trì") {
+          } else if (table.status_id === 4) {
             statusDot = "gray";
           } else {
             statusDot = "white";

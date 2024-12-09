@@ -1,8 +1,14 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TableStatus from "@/components/TableStatus";
 import TableCards from "@/components/TableCards";
+import { useState } from "react";
 
-export default function TableTabs({ floors, tables }) {
+export default function TableTabs({ floors, tables, setSelectedTable }) {
+  const [datastatus, setDataStatus] = useState("all");
+  const filteredTables =
+    datastatus === "all"
+      ? tables
+      : tables.filter((table) => table.status_id === datastatus);
   return (
     <Tabs defaultValue="all" className="flex flex-col">
       <TabsList className="flex justify-around w-3/4 bg-[#5181F5] text-black mb-2">
@@ -17,22 +23,29 @@ export default function TableTabs({ floors, tables }) {
       </TabsList>
 
       <TabsContent key="all" className="flex flex-row gap-x-4 mt-0" value="all">
-        <TableStatus />
-        <TableCards tables={tables} />
+        <TableStatus setStatus={setDataStatus} />
+        <TableCards
+          tables={filteredTables}
+          status={datastatus}
+          setSelectedTable={setSelectedTable}
+        />
       </TabsContent>
 
-      {/* {floors
-        .filter((floor) => floor.id !== "all") // Lọc ra tab "Tất cả"
-        .map((floor) => (
-          <TabsContent
-            key={floor.id}
-            className="flex flex-row gap-x-4 mt-0"
-            value={floor.id}
-          >
-            <TableStatus />
-            <TableCards floor={floor} tables={tables} />
-          </TabsContent>
-        ))} */}
+      {floors.map((floor) => (
+        <TabsContent
+          key={floor.id}
+          className="flex flex-row gap-x-4 mt-0"
+          value={floor.id}
+        >
+          <TableStatus setStatus={setDataStatus} />
+          <TableCards
+            tables={filteredTables.filter(
+              (table) => table.floor_id === floor.id
+            )}
+            setSelectedTable={setSelectedTable}
+          />
+        </TabsContent>
+      ))}
     </Tabs>
   );
 }

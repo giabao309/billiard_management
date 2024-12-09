@@ -51,6 +51,28 @@ export const useGetDistrict = () => {
   return { district, loading, error };
 };
 
+export const useGetFloorByBranch = (branch_id) => {
+  const [floors, setFloors] = useState([]);
+
+  useEffect(() => {
+    const fetchFloors = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/branches/floor",
+          { branch_id }
+        );
+        setFloors(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchFloors();
+  }, [branch_id]);
+
+  return { floors };
+};
+
 export const useGetBranches = () => {
   const branches = [
     { id: 1, name: "Billiard Center Dương Quảng Hàm" },
@@ -63,13 +85,4 @@ export const useGetBranches = () => {
     { id: 8, name: "Billiard Center Ba Vân" },
   ];
   return branches;
-};
-
-export const useGetFloor = () => {
-  const tables = [
-    { name: "Tầng 1", id: "floor-1" },
-    { name: "Tầng 2", id: "floor-2" },
-    { name: "Tầng 3", id: "floor-3" },
-  ];
-  return tables;
 };
