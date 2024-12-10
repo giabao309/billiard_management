@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 export default function InvoiceDetailCard() {
   return (
     <div className="h-[50vh] flex-wrap overflow-auto">
-      <Card className="hover:border-blue-400 hover:border-2 rounded-lg mt-2 shadow-lg">
+      <Card className=" rounded-lg mt-2 shadow-lg">
         <CardContent>
           <div className="flex justify-between mt-3">
             <div className="flex flex-col items-start">

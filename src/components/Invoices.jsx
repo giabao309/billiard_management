@@ -1,14 +1,29 @@
-import { Search } from "lucide-react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import InvoiceDetailCard from "@/components/InvoiceDetailCard";
-import { TbTransfer } from "react-icons/tb";
-import { FaMoneyBill } from "react-icons/fa";
 import { Payment } from "@/components/Payment";
 import { TransferTable } from "@/components/TransferTable";
 
 export default function Invoices({ selectedTable }) {
   const branch = localStorage.getItem("branchName");
   const branch_id = localStorage.getItem("branchID");
+
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+  // Cập nhật ngày giờ mỗi giây
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000);
+
+    // Dọn dẹp interval khi component bị hủy
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // Hàm định dạng ngày giờ
+  const formatDate = (date) => {
+    return date.toLocaleString(); // Chuyển đổi đối tượng Date thành chuỗi ngày giờ theo múi giờ hiện tại
+  };
 
   return (
     <div>
@@ -19,7 +34,10 @@ export default function Invoices({ selectedTable }) {
               {selectedTable.name}
             </span>
             <span className="flex items-center justify-center h-12 px-4 text-[#2A71B0] text-xl font-bold rounded-xl bg-[#E6F0FB]">
-              {branch} - {branch_id}
+              {branch}
+            </span>
+            <span className="flex items-center justify-center h-12 px-4 text-[#2A71B0] text-xl font-bold rounded-xl bg-[#E6F0FB]">
+              {formatDate(currentDateTime)}
             </span>
           </div>
 
@@ -56,7 +74,14 @@ export default function Invoices({ selectedTable }) {
               </div>
             </div>
           ) : (
-            <div className="flex items-center justify-center mt-12">
+            <div className="flex flex-col gap-y-4 items-center justify-center mt-12">
+              <div>
+                <span>Trạng thái: </span>{" "}
+                <span className="font-bold text-xl">
+                  {selectedTable.status}
+                </span>
+              </div>
+
               <Button className="w-[12rem] h-[4rem] bg-[#5181F5] text-xl">
                 Mở bàn
               </Button>

@@ -33,6 +33,16 @@ export default function Header() {
     return <p>{user.name}</p>;
   };
 
+  const pathname = window.location.pathname;
+
+  const menuItems = [
+    { title: "Tổng quan", href: "/admin" },
+    { title: "Quản lý chi nhánh", href: "/admin#" },
+    { title: "Quản lý người dùng", href: "/admin/usermanage" },
+    { title: "Quản lý bàn", href: "/admin#" },
+    { title: "Quản lý kho", href: "/admin/storagemanage" },
+  ];
+
   return (
     <header className="flex items-center justify-between px-8 py-4 bg-[#5181F5] text-white">
       <div className="flex items-center gap-x-16">
@@ -43,18 +53,15 @@ export default function Header() {
 
         <NavigationMenu>
           <NavigationMenuList>
-            <NavigationMenuItem className="flex gap-x-5">
-              <NavigationMenuLink href="#">
-                Tổng quan
-              </NavigationMenuLink>
-              <NavigationMenuLink href="#">
-                Quản lý chi nhánh
-              </NavigationMenuLink>
-              <NavigationMenuLink href="#">
-                Quản lý người dùng
-              </NavigationMenuLink>
-              <NavigationMenuLink href="#">Quản lý bàn</NavigationMenuLink>
-              <NavigationMenuLink href="#">Quản lý kho</NavigationMenuLink>
+            <NavigationMenuItem className="flex gap-x-4">
+              {menuItems.map((item) => (
+                <NavigationMenuLink
+                  href={item.href}
+                  className={`${pathname === item.href ? "underline" : ""}`}
+                >
+                  {item.title}
+                </NavigationMenuLink>
+              ))}
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

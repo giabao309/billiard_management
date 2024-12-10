@@ -19,7 +19,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/*" element={<ClientRoute />} />
-          <Route path="/admin" element={<AdminRoute />} />
+          <Route path="/admin/*" element={<AdminRoute />} />
           <Route path="/employee/*" element={<EmployeeRoute />} />
         </Routes>
         <Toaster />
