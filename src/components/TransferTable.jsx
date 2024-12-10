@@ -18,7 +18,7 @@ export function TransferTable() {
       <DialogTrigger>
         <Button
           variant="outline"
-          className="bg-[#5181F5] w-[22rem] h-[3.5rem] text-xl text-white"
+          className="bg-[#5181F5] w-[15rem] h-[3.5rem] text-xl text-white"
         >
           Chuyển bàn <TbTransfer />
         </Button>

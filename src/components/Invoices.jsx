@@ -36,9 +36,6 @@ export default function Invoices({ selectedTable }) {
             <span className="flex items-center justify-center h-12 px-4 text-[#2A71B0] text-xl font-bold rounded-xl bg-[#E6F0FB]">
               {branch}
             </span>
-            <span className="flex items-center justify-center h-12 px-4 text-[#2A71B0] text-xl font-bold rounded-xl bg-[#E6F0FB]">
-              {formatDate(currentDateTime)}
-            </span>
           </div>
 
           {selectedTable.status_id === 2 ? (
@@ -64,10 +61,10 @@ export default function Invoices({ selectedTable }) {
                   <span className="text-3xl">Tổng tiền: 50,000</span>
                 </div>
                 <div className="flex justify-around">
-                  <div className="flex items-center justify-center w-[48%]">
+                  <div className="flex items-center justify-center w-[30%]">
                     <TransferTable />
                   </div>
-                  <div className="flex items-center justify-center w-[48%]">
+                  <div className="flex items-center justify-center w-[30%]">
                     <Payment />
                   </div>
                 </div>

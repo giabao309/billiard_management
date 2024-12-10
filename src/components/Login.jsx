@@ -11,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // Đảm bảo bạn đã cài axios nếu chưa
 import Register from "@/components/Register";
 import { useNavigate } from "react-router-dom";
 import { handleLogin } from "@/APIs/UserApi";

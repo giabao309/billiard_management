@@ -34,7 +34,7 @@ export function Payment() {
       <DialogTrigger>
         <Button
           variant="outline"
-          className="bg-[#31A300] w-[22rem] h-[3.5rem] text-xl text-white"
+          className="bg-[#31A300] w-[15rem] h-[3.5rem] text-xl text-white"
         >
           Thanh Toán <FaMoneyBill />
         </Button>

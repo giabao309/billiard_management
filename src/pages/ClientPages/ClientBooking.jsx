@@ -3,6 +3,7 @@ import img_bida from "@/assets/imgbida.png";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { MdLocationPin } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 const districts = [
   {
     district: "Quận Gò Vấp",
@@ -27,11 +28,12 @@ const districts = [
 ];
 
 export default function ClientBookingBillard() {
+  const navigate = useNavigate();
   const handleBranchClick = (branch) => {
     // Giả định điều hướng tới trang đặt bàn
     alert(`Bạn đã chọn: ${branch}`);
     // Ví dụ: sử dụng react-router để điều hướng
-    // navigate(`/booking/${branch}`);
+    navigate(`/inforbooking`);
   };
   return (
     <div className="relative">
