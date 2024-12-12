@@ -181,3 +181,29 @@ export const useGetUserByID = (user_id) => {
 
   return { user };
 };
+
+export const useSearchCustomer = (query) => {
+  const [customer, setCustomer] = useState(null);
+
+  useEffect(() => {
+    if (!query) {
+      setCustomer(null);
+      return;
+    }
+    const fetchEmployee = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/users/customer",
+          { query }
+        );
+        setCustomer(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchEmployee();
+  }, [query]);
+
+  return { customer };
+};

@@ -11,7 +11,8 @@ import {
 import { User, Search } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FaMoneyBill } from "react-icons/fa";
-import { useGetEmployeeByID } from "@/APIs/UserApi";
+import { useState, useEffect } from "react";
+import { useGetEmployeeByID, useSearchCustomer } from "@/APIs/UserApi";
 
 export function Payment() {
   const title = [
@@ -23,12 +24,32 @@ export function Payment() {
 
   const userID = localStorage.getItem("userID");
   const { employee } = useGetEmployeeByID(userID);
+  const [query, setQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const { customer } = useSearchCustomer(query);
+
+  useEffect(() => {
+    if (customer) {
+      setSearchResults(customer);
+    }
+  }, [customer]);
+
+  const handleChange = (event) => {
+    setQuery(event.target.value);
+  };
+
+  const handleSelectCustomer = (customerName) => {
+    setQuery(customerName); // Cập nhật giá trị input với tên khách hàng đã chọn
+    setSearchResults([]); // Ẩn danh sách tìm kiếm
+  };
+
   const getEmployee = (employee) => {
     if (!employee) {
       return <p>Loading...</p>;
     }
     return <p>{employee.name}</p>;
   };
+
   return (
     <Dialog>
       <DialogTrigger>
@@ -53,7 +74,7 @@ export function Payment() {
                 <div>
                   <div className="flex justify-between mt-3">
                     {title.map((tit) => (
-                      <div className="flex flex-col w-[12rem]">
+                      <div key={tit.name} className="flex flex-col w-[12rem]">
                         <span className="italic text-gray-500 mb-2">
                           {tit.name}
                         </span>
@@ -66,10 +87,10 @@ export function Payment() {
                     <span className="font-bold">Coca</span>
                   </div>
                   <div className="flex flex-col w-[12rem]">
-                    <span className="">2</span>
+                    <span>2</span>
                   </div>
                   <div className="flex flex-col w-[12rem]">
-                    <span className="">25,000</span>
+                    <span>25,000</span>
                   </div>
                   <div className="flex flex-col w-[12rem]">
                     <span className="font-bold">50,000</span>
@@ -80,10 +101,10 @@ export function Payment() {
                     <span className="font-bold">Giờ bida</span>
                   </div>
                   <div className="flex flex-col w-[12rem]">
-                    <span className="">3</span>
+                    <span>3</span>
                   </div>
                   <div className="flex flex-col w-[12rem]">
-                    <span className="">90,000</span>
+                    <span>90,000</span>
                   </div>
                   <div className="flex flex-col w-[12rem]">
                     <span className="font-bold">180,000</span>
@@ -103,10 +124,31 @@ export function Payment() {
                   Nhân viên thanh toán: {getEmployee(employee)}
                 </span>
               </div>
-              <div className="flex items-center gap-x-2">
+              <div className="flex items-center gap-x-2 relative">
                 <span className="w-[10rem]">Khách hàng: </span>
-                <Input type="" placeholder="Tìm kiếm khách hàng" />
-                <Search />
+                <Input
+                  type="text"
+                  placeholder="Nhập Email hoặc SĐT"
+                  value={query}
+                  onChange={handleChange}
+                />
+                {query && searchResults.length > 0 && (
+                  <div className="absolute top-10 bg-white border shadow-md max-h-40 overflow-y-auto mt-1 w-[calc(100%+2rem)]">
+                    {searchResults.map((customer) => (
+                      <div
+                        key={customer.id}
+                        className="px-2 py-1 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => handleSelectCustomer(customer.name)}
+                      >
+                        <span>{customer.name}</span>
+                        {" | "}
+                        <span>{customer.email}</span>
+                        {" | "}
+                        <span>{customer.numberphone}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex flex-col gap-y-6">
@@ -126,21 +168,15 @@ export function Payment() {
             <div className="flex justify-between mt-6">
               <div className="flex items-center space-x-2">
                 <Checkbox id="terms" />
-                <label htmlFor="terms" className="">
-                  Tiền mặt
-                </label>
+                <label htmlFor="terms">Tiền mặt</label>
               </div>
               <div className="flex items-center space-x-2">
                 <Checkbox id="terms" />
-                <label htmlFor="terms" className="">
-                  Thẻ
-                </label>
+                <label htmlFor="terms">Thẻ</label>
               </div>
               <div className="flex items-center space-x-2">
                 <Checkbox id="terms" />
-                <label htmlFor="terms" className="">
-                  Chuyển khoảng
-                </label>
+                <label htmlFor="terms">Chuyển khoản</label>
               </div>
             </div>
           </div>

@@ -12,7 +12,6 @@ import EmployeeRoute from "@/routes/EmployeeRoute";
 import ClientRoute from "@/routes/ClientRoute";
 import AdminRoute from "@/routes/AdminRoute";
 
-// Kiểm tra user và điều hướng đến route tương ứng
 function App() {
   return (
     <StrictMode>

@@ -6,7 +6,7 @@ import { TransferTable } from "@/components/TransferTable";
 
 export default function Invoices({ selectedTable }) {
   const branch = localStorage.getItem("branchName");
-  const branch_id = localStorage.getItem("branchID");
+  const employeeID = localStorage.getItem("employeeID");
 
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
