@@ -1,14 +1,17 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TableStatus from "@/components/TableStatus";
 import TableCards from "@/components/TableCards";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { TableContext } from "@/Context/TableContext";
 
-export default function TableTabs({ floors, tables, setSelectedTable }) {
+export default function TableTabs({ setSelectedTable, selectedTable }) {
+  const { floors, tables } = useContext(TableContext);
   const [datastatus, setDataStatus] = useState("all");
   const filteredTables =
     datastatus === "all"
       ? tables
       : tables.filter((table) => table.status_id === datastatus);
+
   return (
     <Tabs defaultValue="all" className="flex flex-col">
       <TabsList className="flex justify-around w-3/4 bg-[#5181F5] text-black mb-2">
@@ -28,6 +31,7 @@ export default function TableTabs({ floors, tables, setSelectedTable }) {
           tables={filteredTables}
           status={datastatus}
           setSelectedTable={setSelectedTable}
+          selectedTable={selectedTable}
         />
       </TabsContent>
 

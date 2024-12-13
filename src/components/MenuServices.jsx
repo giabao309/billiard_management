@@ -1,8 +1,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MenuItems from "@/components/MenuItems";
 import MenuTypes from "@/components/MenuTypes";
+import { TableContext } from "@/Context/TableContext";
+import { useState, useContext } from "react";
 
-export default function MenuServices({ categories, items, types }) {
+export default function MenuServices({ items, types }) {
+  const { categories } = useContext(TableContext);
   return (
     <Tabs defaultValue="all" className="flex flex-col">
       <TabsList className="flex justify-around w-3/4 bg-[#5181F5] text-black mb-2">

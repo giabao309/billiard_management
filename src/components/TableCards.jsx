@@ -3,11 +3,16 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import TableImage from "@/assets/table.png";
 import { useToast } from "@/hooks/use-toast";
 
-export default function TableCards({ tables, setSelectedTable }) {
+export default function TableCards({
+  tables,
+  setSelectedTable,
+  selectedTable,
+}) {
   const { toast } = useToast();
 
   const handleCardClick = (table) => {
     setSelectedTable(table);
+    console.log(selectedTable);
     toast({
       title: "Thông báo",
       description: `Đã chọn ${table.name} `,

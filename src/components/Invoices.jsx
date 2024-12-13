@@ -3,26 +3,14 @@ import { Button } from "@/components/ui/button";
 import InvoiceDetailCard from "@/components/InvoiceDetailCard";
 import { Payment } from "@/components/Payment";
 import { TransferTable } from "@/components/TransferTable";
+import { useUpdateOpenTable } from "@/APIs/TablesApi";
 
 export default function Invoices({ selectedTable }) {
   const branch = localStorage.getItem("branchName");
   const employeeID = localStorage.getItem("employeeID");
 
-  const [currentDateTime, setCurrentDateTime] = useState(new Date());
-
-  // Cập nhật ngày giờ mỗi giây
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentDateTime(new Date());
-    }, 1000);
-
-    // Dọn dẹp interval khi component bị hủy
-    return () => clearInterval(intervalId);
-  }, []);
-
-  // Hàm định dạng ngày giờ
-  const formatDate = (date) => {
-    return date.toLocaleString(); // Chuyển đổi đối tượng Date thành chuỗi ngày giờ theo múi giờ hiện tại
+  const handleOpenTable = () => {
+    const { message } = useUpdateOpenTable(selectedTable.id);
   };
 
   return (
@@ -53,7 +41,7 @@ export default function Invoices({ selectedTable }) {
               </div>
 
               <div>
-                <InvoiceDetailCard />
+                <InvoiceDetailCard selectedTable={selectedTable} />
               </div>
 
               <div className="mt-2 p-2 rounded-sm flex flex-col h-full bg-gray-200">

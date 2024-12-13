@@ -70,3 +70,25 @@ export const useGetTableStatus = () => {
 
   return { status, loading, error };
 };
+
+export const useUpdateOpenTable = (table_id) => {
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const fetchTable = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/tables/openTable",
+          { table_id }
+        );
+        setMessage("Thành công");
+      } catch (err) {
+        setMessage("Có lỗi xảy ra");
+      }
+    };
+
+    fetchTable();
+  }, [table_id]);
+
+  return { message };
+};
