@@ -4,7 +4,7 @@ import MenuTypes from "@/components/MenuTypes";
 import { TableContext } from "@/Context/TableContext";
 import { useState, useContext } from "react";
 
-export default function MenuServices({ items, types }) {
+export default function MenuServices({ items }) {
   const { categories } = useContext(TableContext);
   return (
     <Tabs defaultValue="all" className="flex flex-col">
@@ -24,8 +24,8 @@ export default function MenuServices({ items, types }) {
       </TabsList>
 
       <TabsContent key="all" value="all" className="flex flex-row gap-x-4 mt-0">
-        <MenuTypes types={types} />
-        <MenuItems items={items} categories={"all"} />
+        <MenuTypes />
+        <MenuItems categories={"all"} />
       </TabsContent>
 
       {/* {categories

@@ -4,7 +4,7 @@ import TableCards from "@/components/TableCards";
 import { useState, useContext } from "react";
 import { TableContext } from "@/Context/TableContext";
 
-export default function TableTabs({ setSelectedTable, selectedTable }) {
+export default function TableTabs({ setSelectedTable }) {
   const { floors, tables } = useContext(TableContext);
   const [datastatus, setDataStatus] = useState("all");
   const filteredTables =
@@ -27,12 +27,7 @@ export default function TableTabs({ setSelectedTable, selectedTable }) {
 
       <TabsContent key="all" className="flex flex-row gap-x-4 mt-0" value="all">
         <TableStatus setStatus={setDataStatus} />
-        <TableCards
-          tables={filteredTables}
-          status={datastatus}
-          setSelectedTable={setSelectedTable}
-          selectedTable={selectedTable}
-        />
+        <TableCards tables={filteredTables} status={datastatus} />
       </TabsContent>
 
       {floors.map((floor) => (
@@ -46,7 +41,6 @@ export default function TableTabs({ setSelectedTable, selectedTable }) {
             tables={filteredTables.filter(
               (table) => table.floor_id === floor.id
             )}
-            setSelectedTable={setSelectedTable}
           />
         </TabsContent>
       ))}

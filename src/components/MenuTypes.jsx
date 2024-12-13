@@ -1,7 +1,10 @@
 import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useContext } from "react";
+import { TableContext } from "@/Context/TableContext";
 
-export default function TableStatus({ types }) {
+export default function TableStatus() {
+  const { types } = useContext(TableContext);
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex items-center space-x-2">

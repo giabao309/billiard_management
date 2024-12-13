@@ -1,18 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import InvoiceDetailCard from "@/components/InvoiceDetailCard";
 import { Payment } from "@/components/Payment";
 import { TransferTable } from "@/components/TransferTable";
 import { useUpdateOpenTable } from "@/APIs/TablesApi";
+import { TableContext } from "@/Context/TableContext";
 
-export default function Invoices({ selectedTable }) {
+export default function Invoices() {
   const branch = localStorage.getItem("branchName");
-  const employeeID = localStorage.getItem("employeeID");
 
-  const handleOpenTable = () => {
-    const { message } = useUpdateOpenTable(selectedTable.id);
+  const { selectedTable, setSelectedTable } = useContext(TableContext);
+
+  const { openTable } = useUpdateOpenTable();
+
+  const handleOpenTable = async () => {
+    if (selectedTable && selectedTable.id) {
+      try {
+        const updatedTable = await openTable(selectedTable.id);
+        window.location.reload();
+        setSelectedTable(updatedTable);
+      } catch (error) {
+        console.error("Error opening table:", error);
+      }
+    }
   };
-
   return (
     <div>
       {selectedTable ? (
@@ -27,7 +38,7 @@ export default function Invoices({ selectedTable }) {
           </div>
 
           {selectedTable.status_id === 2 ? (
-            <div className=" h-full">
+            <div className="h-full">
               <div className="flex justify-start items-center h-12 gap-x-2">
                 <span className="flex items-center justify-between px-2 h-10 rounded-md bg-gray-200 ">
                   Hoá đơn: HD001
@@ -41,7 +52,7 @@ export default function Invoices({ selectedTable }) {
               </div>
 
               <div>
-                <InvoiceDetailCard selectedTable={selectedTable} />
+                <InvoiceDetailCard />
               </div>
 
               <div className="mt-2 p-2 rounded-sm flex flex-col h-full bg-gray-200">
@@ -67,7 +78,10 @@ export default function Invoices({ selectedTable }) {
                 </span>
               </div>
 
-              <Button className="w-[12rem] h-[4rem] bg-[#5181F5] text-xl">
+              <Button
+                className="w-[12rem] h-[4rem] bg-[#5181F5] text-xl"
+                onClick={handleOpenTable} // Gọi hàm mở bàn khi nhấn
+              >
                 Mở bàn
               </Button>
             </div>

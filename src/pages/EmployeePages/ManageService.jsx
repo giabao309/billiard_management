@@ -1,24 +1,10 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  useGetMenuTypes,
-  useGetMenuItems,
-  useGetMenuCategories,
-} from "@/APIs/ServiceApi";
 import TableTabs from "@/components/TableTabs";
 import MenuServices from "@/components/MenuServices";
 import Invoices from "@/components/Invoices";
-import { useState } from "react";
 import { TableProvider } from "@/Context/TableContext";
 
 export default function ManageService() {
-  //selected table
-  const [selectedTable, setSelectedTable] = useState({});
-
-  //menu data
-  const { categories } = useGetMenuCategories();
-  const { types } = useGetMenuTypes();
-  const { items } = useGetMenuItems();
-
   return (
     <div className="flex min-h-[60vh] bg-gray-300">
       <TableProvider>
@@ -33,18 +19,15 @@ export default function ManageService() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="table">
-              <TableTabs
-                setSelectedTable={setSelectedTable}
-                selectedTable={selectedTable}
-              />
+              <TableTabs />
             </TabsContent>
             <TabsContent value="menu">
-              <MenuServices items={items} types={types} />
+              <MenuServices />
             </TabsContent>
           </Tabs>
         </div>
         <div className="w-2/5 m-2 p-2 rounded-md bg-white">
-          <Invoices selectedTable={selectedTable} />
+          <Invoices />
         </div>
       </TableProvider>
     </div>

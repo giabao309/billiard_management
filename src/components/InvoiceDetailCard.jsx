@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
-export default function InvoiceDetailCard({ selectedTable }) {
+export default function InvoiceDetailCard() {
   return (
     <div className="h-[50vh] flex-wrap overflow-auto">
       <Card className=" rounded-lg mt-2 shadow-lg">
@@ -19,9 +19,7 @@ export default function InvoiceDetailCard({ selectedTable }) {
               </div>
               <div className="flex flex-col items-center">
                 <span className="italic text-gray-500 mb-2">Đơn giá</span>
-                <span className="font-bold">
-                  {selectedTable.price.toLocaleString()}
-                </span>
+                <span className="font-bold">30</span>
               </div>
               <div className="flex flex-col items-center">
                 <span className="italic text-gray-500 mb-2">Thành tiền</span>

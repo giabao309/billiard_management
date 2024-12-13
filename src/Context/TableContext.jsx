@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import { useGetFloorByBranch } from "@/APIs/BilliardApi";
 import { useGetTableByBranch } from "@/APIs/TablesApi";
 import {
@@ -14,12 +14,25 @@ export const TableProvider = ({ children }) => {
   const { floors } = useGetFloorByBranch(branch_id);
   const { tables } = useGetTableByBranch(branch_id);
 
+  //selected table
+  const [selectedTable, setSelectedTable] = useState(null);
+
   //menu data
   const { categories } = useGetMenuCategories();
   const { types } = useGetMenuTypes();
   const { items } = useGetMenuItems();
   return (
-    <TableContext.Provider value={{ floors, tables, categories, types, items }}>
+    <TableContext.Provider
+      value={{
+        floors,
+        tables,
+        categories,
+        types,
+        items,
+        selectedTable,
+        setSelectedTable,
+      }}
+    >
       {children}
     </TableContext.Provider>
   );

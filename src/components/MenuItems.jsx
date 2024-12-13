@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Card,
   CardContent,
@@ -8,8 +8,10 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { TableContext } from "@/Context/TableContext";
 
-export default function MenuItems({ items, categories }) {
+export default function MenuItems({ categories }) {
+  const { items } = useContext(TableContext);
   const { toast } = useToast();
 
   const filteredItems =

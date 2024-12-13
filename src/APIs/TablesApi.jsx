@@ -28,7 +28,7 @@ export const useGetTableByBranch = (branch_id) => {
   const [tables, setTables] = useState([]);
 
   useEffect(() => {
-    const fetchFloors = async () => {
+    const fetchTables = async () => {
       try {
         const response = await axios.post(
           "http://localhost:5000/api/tables/branch",
@@ -40,7 +40,7 @@ export const useGetTableByBranch = (branch_id) => {
       }
     };
 
-    fetchFloors();
+    fetchTables();
   }, [branch_id]);
 
   return { tables };
@@ -71,24 +71,21 @@ export const useGetTableStatus = () => {
   return { status, loading, error };
 };
 
-export const useUpdateOpenTable = (table_id) => {
+export const useUpdateOpenTable = () => {
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    const fetchTable = async () => {
-      try {
-        const response = await axios.post(
-          "http://localhost:5000/api/tables/openTable",
-          { table_id }
-        );
-        setMessage("Thành công");
-      } catch (err) {
-        setMessage("Có lỗi xảy ra");
-      }
-    };
+  const openTable = async (id) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/tables/openTable",
+        { table_id: id }
+      );
 
-    fetchTable();
-  }, [table_id]);
+      setMessage("Thành công");
+    } catch (err) {
+      setMessage("Có lỗi xảy ra");
+    }
+  };
 
-  return { message };
+  return { message, openTable };
 };
