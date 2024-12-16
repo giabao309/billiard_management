@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import {
   Table,
   TableBody,
@@ -19,66 +18,17 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Search, File, Plus } from "lucide-react";
 import { DialogDemo } from "@/components/Dialog";
 import { useGetEmployees } from "@/APIs/UserApi";
-import { useGetDistrict, useGetAddress } from "@/APIs/BilliardApi";
 
 export default function ManageStaf() {
   const { employees } = useGetEmployees();
-  const { district } = useGetDistrict();
-  const { address } = useGetAddress();
 
   return (
     <div className="w-full flex p-4">
-      {/* Sidebar with filters */}
-      <div className="w-[20%] flex flex-col space-y-6 mr-6">
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Tìm kiếm</h3>
-          <div className="relative">
-            <Input
-              placeholder="Theo Email / tên"
-              className="rounded-lg pl-10"
-            />
-            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
-          </div>
-        </div>
-        <div className="mb-4">
-          <div className="w-full">
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Chon khu vưc" />
-              </SelectTrigger>
-              <SelectContent>
-                {district.map((dis, districtIndex) => (
-                  <SelectGroup key={districtIndex}>
-                    <SelectLabel>Quận {dis.district}</SelectLabel>
-                    {address
-                      .filter((addr) => addr.district === dis.district)
-                      .map((addr, addrIndex) => (
-                        <SelectItem key={addrIndex} value={addr.address}>
-                          * {addr.address}
-                        </SelectItem>
-                      ))}
-                  </SelectGroup>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </div>
-
       {/* Main content with table and actions */}
-      <div className="w-[80%]">
+      <div className="w-full">
         <div className="flex justify-between items-center bg-blue-50 p-6 rounded-lg shadow-sm mb-4">
           <h2 className="font-bold text-2xl text-black">Nhân Viên</h2>
           <div className=" flex space-x-4">
@@ -89,6 +39,16 @@ export default function ManageStaf() {
           </div>
         </div>
         {/* Table */}
+
+        <div className="mb-4">
+          <div className="relative">
+            <Input
+              placeholder="Theo Email / tên"
+              className="rounded-lg pl-10"
+            />
+            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
+          </div>
+        </div>
         <Table className="bg-white rounded-lg shadow-sm">
           <TableHeader>
             <TableRow className="bg-blue-100 text-gray-700">
@@ -131,7 +91,7 @@ export default function ManageStaf() {
           </TableBody>
         </Table>
         {/* Pagination */}
-        <Pagination className="mt-6 justify-start">
+        <Pagination className="mt-6 justify-center">
           <PaginationContent className="flex items-center justify-start space-x-2">
             <PaginationItem>
               <PaginationPrevious href="#" />

@@ -1,33 +1,84 @@
-export const useGetInvoice = () => {
-  const invoices = [
-    { id: 1, date: "10/07/2024", status: 1 },
-    { id: 2, date: "10/07/2024", status: 2 },
-  ];
-  return invoices;
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+export const useGetInvoiceByTableID = (table_id) => {
+  const [invoices, setInvoice] = useState(null);
+
+  useEffect(() => {
+    const fetchInvoice = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/invoices/id",
+          { table_id }
+        );
+        setInvoice(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchInvoice();
+  }, [table_id]);
+
+  return { invoices };
 };
 
-export const useGetInvoiceStatus = () => {
-  const status = [
-    { id: 1, name: "Chưa thanh toán" },
-    { id: 2, name: "Đã thanh toán" },
-  ];
-  return status;
+export const useGetInvoiceDetailByID = (invoices_id) => {
+  const [invoiceDetail, setInvoiceDetail] = useState(null);
+
+  useEffect(() => {
+    const fetchInvoice = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/invoices/getInvoiceDetail",
+          { invoices_id }
+        );
+        setInvoiceDetail(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchInvoice();
+  }, [invoices_id]);
+
+  return { invoiceDetail };
 };
 
-export const useGetInvoicesDetail = () => {
-  const detail = [
+export const createInvoices = async (
+  branch_id,
+  employee_id,
+  table_id,
+  create_date
+) => {
+  const response = await axios.post(
+    "http://localhost:5000/api/invoices/createInvoices",
     {
-      id: 1,
-      branches: 1,
-      invoices: 1,
-      service: 1,
-      employee: 1,
-      customer: 1,
-      table: 1,
-      playtime: 3.4,
-      quantity: 1,
-      date: "10/07/2024",
-    },
-  ];
-  return detail;
+      branch_id,
+      employee_id,
+      table_id,
+      create_date,
+    }
+  );
+};
+
+export const useGetPromotion = () => {
+  const [promotion, setPromotion] = useState(null);
+
+  useEffect(() => {
+    const fetchPromotion = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/invoices/promotion"
+        );
+        setPromotion(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchPromotion();
+  }, []);
+
+  return { promotion };
 };

@@ -1,3 +1,4 @@
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,13 +9,61 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { User, Search } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FaMoneyBill } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { TableContext } from "@/Context/TableContext";
 import { useGetEmployeeByID, useSearchCustomer } from "@/APIs/UserApi";
+import PrintableInvoice from "./PrintInvoices";
+import CSS from "@/components/PrintInvoiceCSS";
 
 export function Payment() {
+  const {
+    selectedTable,
+    invoiceDetail,
+    formattedTime,
+    branchName,
+    employeeName,
+    totalAmount,
+    playTime,
+    difference,
+    invoices,
+    promotion,
+  } = useContext(TableContext);
+
+  const printRef = useRef();
+
+  const handlePrint = () => {
+    const printContent = printRef.current;
+    const newWin = window.open("");
+    newWin.document.write(`
+      <html>
+        <head>
+          <title>Hóa đơn</title>
+          <style>
+          ${CSS}
+          </style>
+        </head>
+        <body class="p-8">
+          ${printContent.innerHTML}
+        </body>
+      </html>
+    `);
+    newWin.document.close();
+    newWin.focus();
+    newWin.print();
+    newWin.close();
+  };
+
   const title = [
     { name: "Tên sản phẩm" },
     { name: "Số lượng" },
@@ -22,32 +71,55 @@ export function Payment() {
     { name: "Thành tiền" },
   ];
 
-  const userID = localStorage.getItem("userID");
-  const { employee } = useGetEmployeeByID(userID);
+  const totalInvoiceDetail = (quantity, price) => {
+    return quantity * price;
+  };
+
+  const [selectedValue, setSelectedValue] = useState(0); // State để lưu giá trị chọn
+
+  const handleSelectChange = (value) => {
+    setSelectedValue(value); // Cập nhật giá trị khi chọn
+  };
+
+  //Hàm làm tròn
+  const formatNum = (num) => {
+    const rounded = num.toFixed(3);
+    const roundedNumber = parseFloat(rounded);
+    const finalNumber = Math.round(roundedNumber / 1000) * 1000;
+    return finalNumber;
+  };
+
+  //Tính bill kèm giảm giá
+  const [totalBill, setTotalBill] = useState(totalAmount);
+  const totalPromotion = totalAmount - totalAmount * (selectedValue / 100);
+
+  useEffect(() => {
+    if (selectedValue === 0) {
+      // Nếu không có giảm giá, giữ nguyên giá trị tổng tiền
+      setTotalBill(totalAmount);
+    } else {
+      // Nếu có giảm giá, áp dụng và làm tròn
+      setTotalBill(formatNum(totalPromotion));
+    }
+  }, [selectedValue, totalAmount]);
+
+  //Tìm kiếm khách hàng
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const { customer } = useSearchCustomer(query);
-
   useEffect(() => {
     if (customer) {
       setSearchResults(customer);
     }
   }, [customer]);
-
   const handleChange = (event) => {
     setQuery(event.target.value);
   };
-
-  const handleSelectCustomer = (customerName) => {
+  const handleSelectCustomer = (customerName, customerID) => {
     setQuery(customerName); // Cập nhật giá trị input với tên khách hàng đã chọn
+    setSelectedCustomerId(customerID);
     setSearchResults([]); // Ẩn danh sách tìm kiếm
-  };
-
-  const getEmployee = (employee) => {
-    if (!employee) {
-      return <p>Loading...</p>;
-    }
-    return <p>{employee.name}</p>;
   };
 
   return (
@@ -67,7 +139,10 @@ export function Payment() {
         <div className="flex">
           <div className="w-[60%] h-[30rem]">
             <div className="flex gap-x-4">
-              <User /> <span>Khách lẻ</span>
+              <User /> <span>Khách lẻ </span>
+            </div>
+            <div className="flex gap-x-4 mt-4 text-xl">
+              <span>Mã hoá đơn: HD00{invoices.id}</span>
             </div>
             <div className="flex-wrap overflow-auto">
               <div className="rounded-lg mt-2 shadow-lg">
@@ -84,44 +159,60 @@ export function Payment() {
                 </div>
                 <div className="flex justify-between mt-3">
                   <div className="flex flex-col w-[12rem]">
-                    <span className="font-bold">Coca</span>
-                  </div>
-                  <div className="flex flex-col w-[12rem]">
-                    <span>2</span>
-                  </div>
-                  <div className="flex flex-col w-[12rem]">
-                    <span>25,000</span>
-                  </div>
-                  <div className="flex flex-col w-[12rem]">
-                    <span className="font-bold">50,000</span>
-                  </div>
-                </div>
-                <div className="flex justify-between mt-3">
-                  <div className="flex flex-col w-[12rem]">
                     <span className="font-bold">Giờ bida</span>
                   </div>
                   <div className="flex flex-col w-[12rem]">
-                    <span>3</span>
+                    <span>{difference} Giờ</span>
                   </div>
                   <div className="flex flex-col w-[12rem]">
-                    <span>90,000</span>
+                    <span>{selectedTable.price.toLocaleString()}</span>
                   </div>
                   <div className="flex flex-col w-[12rem]">
-                    <span className="font-bold">180,000</span>
+                    <span className="font-bold">
+                      {playTime.toLocaleString()}
+                    </span>
                   </div>
                 </div>
+                {invoiceDetail ? (
+                  <div>
+                    {invoiceDetail.map((invoice) => (
+                      <div className="flex justify-between mt-3">
+                        <div className="flex flex-col w-[12rem]">
+                          <span className="font-bold">{invoice.name}</span>
+                        </div>
+                        <div className="flex flex-col w-[12rem]">
+                          <span>{invoice.quantity}</span>
+                        </div>
+                        <div className="flex flex-col w-[12rem]">
+                          <span> {invoice.price.toLocaleString()}</span>
+                        </div>
+                        <div className="flex flex-col w-[12rem]">
+                          <span className="font-bold">
+                            {totalInvoiceDetail(
+                              invoice.quantity,
+                              invoice.price
+                            ).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>
+
           <div className="w-[35%]">
             <div className="mb-6 flex flex-col gap-y-6">
               <div className="flex gap-x-4">
-                <span className="text-2xl">Bàn 1 - Tầng 1</span>
-                <span className="text-2xl">Billiard Center Võ Duy Ninh</span>
+                <span className="text-2xl">{selectedTable.name}</span>
+                <span className="text-2xl">{branchName}</span>
               </div>
               <div className="flex items-center gap-x-2">
                 <span className="flex gap-x-2">
-                  Nhân viên thanh toán: {getEmployee(employee)}
+                  Nhân viên thanh toán: {employeeName}
                 </span>
               </div>
               <div className="flex items-center gap-x-2 relative">
@@ -138,7 +229,9 @@ export function Payment() {
                       <div
                         key={customer.id}
                         className="px-2 py-1 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => handleSelectCustomer(customer.name)}
+                        onClick={() =>
+                          handleSelectCustomer(customer.name, customer.id)
+                        }
                       >
                         <span>{customer.name}</span>
                         {" | "}
@@ -153,26 +246,42 @@ export function Payment() {
             </div>
             <div className="flex flex-col gap-y-6">
               <div className="flex justify-between items-center">
-                <span>Tổng tiền hàng</span>
-                <span className="font-bold text-xl">230.000</span>
+                <span>Tổng tiền:</span>
+                <span className="font-bold text-xl">
+                  {totalAmount.toLocaleString()}
+                </span>
               </div>
               <div className="flex justify-between items-center">
-                <span>Giảm giá</span>
-                <span className="font-bold text-xl">23.000 (10%)</span>
+                <span>Giảm giá:</span>
+                <Select
+                  value={selectedValue}
+                  onValueChange={handleSelectChange}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Giảm giá" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {promotion.map((promo) => (
+                        <SelectItem key={promo.value} value={promo.value}>
+                          {promo.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-2xl">Tổng cộng</span>
-                <span className="font-bold text-2xl">207.000</span>
+                <span className="font-bold text-2xl">
+                  {totalBill.toLocaleString()}
+                </span>
               </div>
             </div>
-            <div className="flex justify-between mt-6">
+            <div className="flex justify-around mt-6">
               <div className="flex items-center space-x-2">
                 <Checkbox id="terms" />
                 <label htmlFor="terms">Tiền mặt</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="terms" />
-                <label htmlFor="terms">Thẻ</label>
               </div>
               <div className="flex items-center space-x-2">
                 <Checkbox id="terms" />
@@ -180,9 +289,22 @@ export function Payment() {
               </div>
             </div>
           </div>
+          <div className="hidden">
+            <PrintableInvoice ref={printRef} />
+          </div>
         </div>
         <DialogFooter>
-          <Button type="submit" className="bg-[#31A300]">
+          <Button
+            type="submit"
+            className="bg-gray-200 text-black hover:text-white"
+            onClick={handlePrint}
+          >
+            In hoá đơn
+          </Button>
+          <Button
+            type="submit"
+            className="bg-[#31A300] hover:bg-gray-100 hover:text-black"
+          >
             Thanh toán
           </Button>
         </DialogFooter>

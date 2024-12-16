@@ -138,7 +138,7 @@ export const useGetEmployees = () => {
   return { employees, loading, error };
 };
 
-export const useGetEmployeeByID = (employee_id) => {
+export const useGetEmployeeByID = (user_id) => {
   const [employee, setEmployee] = useState(null);
 
   useEffect(() => {
@@ -146,7 +146,7 @@ export const useGetEmployeeByID = (employee_id) => {
       try {
         const response = await axios.post(
           "http://localhost:5000/api/users/employeeID",
-          { employee_id }
+          { user_id }
         );
         setEmployee(response.data);
       } catch (err) {
@@ -155,7 +155,7 @@ export const useGetEmployeeByID = (employee_id) => {
     };
 
     fetchEmployee();
-  }, [employee_id]);
+  }, [user_id]);
 
   return { employee };
 };

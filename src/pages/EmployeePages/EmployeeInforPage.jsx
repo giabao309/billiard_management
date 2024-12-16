@@ -49,16 +49,16 @@ export default function EmployeeInfor() {
               <label className="block text-gray-600 mb-2">
                 Chi nhánh làm việc
               </label>
-              <Input disabled defaultValue={employee.branch} />
+              <Input readOnly defaultValue={employee.branch} />
             </div>
             <div>
               <label className="block text-gray-600 mb-2">Ca làm việc</label>
-              <Input disabled defaultValue={employee.shift} />
+              <Input readOnly defaultValue={employee.shift} />
             </div>
             <div>
               <label className="block text-gray-600 mb-2">Lương</label>
               <Input
-                disabled
+                readOnly
                 defaultValue={employee.salary.toLocaleString("vi-VN")}
               />
             </div>

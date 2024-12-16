@@ -1,68 +1,116 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef } from "react";
 
-const Timer = () => {
-  const [isRunning, setIsRunning] = useState(false); // Trạng thái xem timer có chạy không
-  const [time, setTime] = useState(0); // Lưu thời gian tính từ giây (s)
+const Invoice = () => {
+  const printRef = useRef();
 
-  // Hàm bắt đầu hoặc dừng timer
-  const toggleTimer = () => {
-    setIsRunning(!isRunning);
-  };
-
-  // Hàm reset thời gian lại từ đầu
-  const resetTimer = () => {
-    setIsRunning(false); // Dừng timer khi reset
-    setTime(0); // Đặt lại thời gian về 0
-  };
-
-  // Hàm tính toán thời gian và cập nhật giây
-  useEffect(() => {
-    let interval;
-
-    // Nếu isRunning là true, bắt đầu đếm thời gian
-    if (isRunning) {
-      interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 1); // Tăng thời gian mỗi giây
-      }, 1000);
-    } else {
-      // Nếu không chạy, dừng interval
-      clearInterval(interval);
-    }
-
-    // Dọn dẹp khi component unmount hoặc isRunning thay đổi
-    return () => clearInterval(interval);
-  }, [isRunning]);
-
-  // Chuyển đổi thời gian từ giây thành số float (giờ, phút -> giờ.phút)
-  const formatFloat = (timeInSeconds) => {
-    const hours = Math.floor(timeInSeconds / 3600);
-    const minutes = Math.floor((timeInSeconds % 3600) / 60);
-
-    // Chuyển đổi phút thành phần thập phân của giờ
-    const floatTime = hours + minutes / 60;
-
-    // Trả về kết quả là một số float
-    return floatTime.toFixed(2); // Làm tròn đến 2 chữ số thập phân
-  };
-
-  const formatTime = (timeInSeconds) => {
-    const hours = Math.floor(timeInSeconds / 3600);
-    const minutes = Math.floor((timeInSeconds % 3600) / 60);
-    const seconds = timeInSeconds % 60;
-
-    return `${hours}:${minutes < 10 ? "0" : ""}${minutes}:${
-      seconds < 10 ? "0" : ""
-    }${seconds}`;
+  const handlePrint = () => {
+    const printContent = printRef.current;
+    const newWin = window.open("");
+    newWin.document.write(`
+      <html>
+        <head>
+          <title>Hóa đơn</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              padding: 20px;
+            }
+            .invoice-header {
+              text-align: center;
+              margin-bottom: 20px;
+            }
+            .invoice-details {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 20px;
+            }
+            .invoice-details th, .invoice-details td {
+              border: 1px solid #000;
+              padding: 8px;
+              text-align: left;
+            }
+            .invoice-footer {
+              text-align: right;
+              margin-top: 20px;
+            }
+          </style>
+        </head>
+        <body>
+          ${printContent.innerHTML}
+        </body>
+      </html>
+    `);
+    newWin.document.close();
+    newWin.focus();
+    newWin.print();
+    newWin.close();
   };
 
   return (
     <div>
-      <h1>Timer: {formatTime(time)}</h1>
-      <h1>Timer: {formatFloat(time)}</h1>
-      <button onClick={toggleTimer}>{isRunning ? "Stop" : "Start"}</button>
-      <button onClick={resetTimer}>Reset</button>
+      {/* Giao diện thanh toán */}
+      <div
+        style={{
+          padding: "20px",
+          border: "1px solid #ddd",
+          marginBottom: "20px",
+        }}
+      >
+        <h2>Thanh toán</h2>
+        <p>
+          <strong>Người mua:</strong> Nguyễn Văn A
+        </p>
+        <p>
+          <strong>Sản phẩm:</strong> Laptop Dell XPS 15
+        </p>
+        <p>
+          <strong>Số lượng:</strong> 1
+        </p>
+        <p>
+          <strong>Đơn giá:</strong> 50,000,000 VND
+        </p>
+        <p>
+          <strong>Thành tiền:</strong> 50,000,000 VND
+        </p>
+        <button onClick={handlePrint} style={{ marginTop: "20px" }}>
+          In hóa đơn
+        </button>
+      </div>
+
+      {/* Giao diện in hóa đơn */}
+      <div ref={printRef} style={{ display: "none" }}>
+        <div className="invoice-header">
+          <h1>Hóa đơn bán hàng</h1>
+          <p>Công ty TNHH ABC</p>
+          <p>Địa chỉ: 123 Đường ABC, Quận XYZ, TP. HCM</p>
+        </div>
+        <table className="invoice-details">
+          <thead>
+            <tr>
+              <th>Sản phẩm</th>
+              <th>Số lượng</th>
+              <th>Đơn giá</th>
+              <th>Thành tiền</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Laptop Dell XPS 15</td>
+              <td>1</td>
+              <td>50,000,000 VND</td>
+              <td>50,000,000 VND</td>
+            </tr>
+          </tbody>
+        </table>
+        <div className="invoice-footer">
+          <p>
+            <strong>Tổng cộng:</strong> 50,000,000 VND
+          </p>
+          <p>Ngày: {new Date().toLocaleDateString()}</p>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Timer;
+export default Invoice;

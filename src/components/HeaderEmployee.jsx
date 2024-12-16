@@ -16,7 +16,6 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-
 import { LogOut, UserRoundPen } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -33,6 +32,7 @@ export default function HeaderEmployee() {
     localStorage.setItem("branchName", employee.branch);
     localStorage.setItem("branchID", employee.branch_id);
     localStorage.setItem("employeeID", employee.employee_id);
+    localStorage.setItem("employeeName", employee.name);
     return <p>{employee.name}</p>;
   };
 

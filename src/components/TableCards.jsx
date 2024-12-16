@@ -4,14 +4,19 @@ import TableImage from "@/assets/table.png";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useContext } from "react";
 import { TableContext } from "@/Context/TableContext";
+import { Check } from "lucide-react";
 
 export default function TableCards({ tables }) {
   const { toast } = useToast();
 
   const { setSelectedTable } = useContext(TableContext);
 
+  // Trạng thái để theo dõi bàn đang chọn
+  const [selectedTableId, setSelectedTableId] = useState(null);
+
   const handleCardClick = (table) => {
     setSelectedTable(table);
+    setSelectedTableId(table.id);
     // toast({
     //   title: "Thông báo",
     //   description: `Đã chọn ${table.name} `,
@@ -24,28 +29,40 @@ export default function TableCards({ tables }) {
         tables.map((table) => {
           let statusDot;
           if (table.status_id === 2) {
-            statusDot = "green";
+            statusDot = "#66CC66";
           } else if (table.status_id === 3) {
-            statusDot = "red";
+            statusDot = "#FF3333";
           } else if (table.status_id === 4) {
-            statusDot = "gray";
+            statusDot = "rgb(156 163 175)";
           } else {
             statusDot = "white";
           }
+
+          const isSelected = selectedTableId === table.id;
+
           return (
             <Button
               key={table.id}
-              className="bg-no-repeat bg-cover bg-white text-black hover:bg-white w-[10rem] h-[7.5rem] border-none flex items-center justify-center cursor-pointer"
-              style={{ backgroundImage: `url(${TableImage})` }}
+              className="bg-no-repeat bg-cover bg-white text-black hover:bg-white w-[10rem] h-[7.5rem] p-4 border-none flex items-center justify-center"
+              style={{
+                backgroundImage: `url(${TableImage})`,
+              }}
               onClick={() => handleCardClick(table)}
             >
-              <CardHeader>
-                <CardTitle>{table.name}</CardTitle>
-              </CardHeader>
               <div
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: statusDot }}
-              ></div>
+                className="flex items-center justify-center w-full h-full rounded-lg"
+                style={{
+                  backgroundColor: statusDot,
+                }}
+              >
+                <div className="flex h-full w-[85%] items-center justify-center gap-x-2">
+                  <div className="text-2xl">{table.name}</div>
+                </div>
+
+                <div className="h-full w-[15%] mt-4">
+                  {isSelected && <Check />}
+                </div>
+              </div>
             </Button>
           );
         })
