@@ -8,7 +8,7 @@ export default function AdminLayout() {
   return (
     <div>
       <Header />
-      <Test3 />
+      <Dashboard />
     </div>
   );
 }
