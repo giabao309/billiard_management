@@ -43,6 +43,7 @@ export default function Dashboard() {
                 </div>
             </div>
 
+
             {/* Biểu đồ */}
             <div className="mt-8 bg-white shadow-md rounded-lg p-6">
                 <h2 className="text-lg font-bold text-gray-800 mb-4">Doanh Thu</h2>
@@ -60,6 +61,7 @@ export default function Dashboard() {
                 <h2 className="text-lg font-bold text-gray-800 mb-4">Biểu đồ doanh thu sản phẩm</h2>
                 <ProductRevenueChart />
             </div>
+
         </div>
 
     )

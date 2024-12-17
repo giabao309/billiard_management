@@ -5,18 +5,12 @@ import { TableContext } from "@/Context/TableContext";
 import { Check } from "lucide-react";
 
 export default function TableCards() {
-  const { setSelectedTable, getTable, toast } = useContext(TableContext);
-
-  // Trạng thái để theo dõi bàn đang chọn
+  const { setSelectedTable, getTable } = useContext(TableContext);
   const [selectedTableId, setSelectedTableId] = useState(null);
 
   const handleCardClick = (table) => {
     setSelectedTable(table);
     setSelectedTableId(table.id);
-    toast({
-      title: "Thông báo",
-      description: `Đã chọn ${table.name} `,
-    });
   };
 
   return (

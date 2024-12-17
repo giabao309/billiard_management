@@ -8,6 +8,8 @@ import {
   useGetTableByBranchAndStatus,
   useUpdateOpenTable,
   useUpdateCloseTable,
+  useGetTableAvailable,
+  useUpdateTransferTable,
 } from "@/APIs/TablesApi";
 import {
   useGetMenuTypes,
@@ -35,6 +37,17 @@ export const TableProvider = ({ children }) => {
   const employeeID = localStorage.getItem("employeeID");
   const employeeName = localStorage.getItem("employeeName");
 
+  //SERVICES
+  const { categories } = useGetMenuCategories();
+  const [cate, setCate] = useState("all");
+
+  const { types } = useGetMenuTypes();
+  const [type, setType] = useState("all");
+
+  const { items } = useGetMenuItems();
+
+  const [services, setServices] = useState(items);
+
   // TABLE
   const { floors } = useGetFloorByBranch(branch_id);
   const [floor, setFloor] = useState("all");
@@ -45,6 +58,8 @@ export const TableProvider = ({ children }) => {
   const { tableByStatus } = useGetTableByBranchAndStatus(branch_id, statu);
 
   const { tables } = useGetTableByBranch(branch_id);
+  const { tableAvailable } = useGetTableAvailable(branch_id);
+  const { transferTable } = useUpdateTransferTable();
 
   const [getTable, setGetTable] = useState(tables);
 
@@ -65,9 +80,6 @@ export const TableProvider = ({ children }) => {
   }, [floor, tables, tableByFloor]);
 
   const [selectedTable, setSelectedTable] = useState(null);
-  const { categories } = useGetMenuCategories();
-  const { types } = useGetMenuTypes();
-  const { items } = useGetMenuItems();
 
   //INVOICES
   const { openTable } = useUpdateOpenTable();
@@ -176,6 +188,8 @@ export const TableProvider = ({ children }) => {
         status,
         setStatus,
         updateInvoicePayment,
+        tableAvailable,
+        transferTable,
       }}
     >
       {children}

@@ -39,6 +39,7 @@ export function Payment() {
     promotion,
     closeTable,
     updateInvoicePayment,
+    toast,
   } = useContext(TableContext);
 
   const title = [
@@ -115,8 +116,6 @@ export function Payment() {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const { customer } = useSearchCustomer(query);
   useEffect(() => {
-    setSelectedCustomerId(null);
-
     if (customer) {
       setSearchResults(customer);
     }
@@ -132,15 +131,21 @@ export function Payment() {
 
   //Hàm Thanh toán
   const handlePayment = async () => {
-    const updatedTable = await closeTable(selectedTable.id);
-    const updateInvoice = await updateInvoicePayment(
+    await closeTable(selectedTable.id);
+    await updateInvoicePayment(
       selectedCustomerId,
       difference,
       selectedPromoId,
       totalBill,
       invoices.id
     );
-    window.location.reload();
+    toast({
+      title: "Thông báo",
+      description: `Thanh toán thành công`,
+    });
+    setTimeout(() => {
+      window.location.reload();
+    }, 800);
   };
 
   return (
@@ -160,7 +165,7 @@ export function Payment() {
         <div className="flex">
           <div className="w-[60%] h-[30rem]">
             <div className="flex gap-x-4">
-              <User /> <span>Khách lẻ {selectedCustomerId}</span>
+              <User /> <span>Khách lẻ</span>
             </div>
             <div className="flex gap-x-4 mt-4 text-xl">
               <span>Mã hoá đơn: HD00{invoices.id}</span>

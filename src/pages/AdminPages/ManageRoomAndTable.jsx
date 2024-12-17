@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   Table,
@@ -29,12 +29,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Search, File, Plus, Import } from "lucide-react";
-import { DialogDemo } from "@/components/Dialog";
+import { Search, File, Plus } from "lucide-react";
+import AddRoomTableForm from "@/components/ui/add-form-tableRoom";
+import { DialogTable } from "@/components/DialogEditTable";
 
 export default function ManageRoomAndTable() {
+  const [showAddForm, setShowAddForm] = useState(false); // State để mở/đóng form
+  const [currentPage, setCurrentPage] = useState(1); // State cho trang hiện tại
+
+  const itemsPerPage = 8; // Giới hạn 8 items mỗi trang
+
+  // Dữ liệu giả lập
+  const data = [
+    { id: 1, tenPhongBan: "Phòng VIP 1", khuVuc: "Khu A", trangThai: "Đang sử dụng" },
+    { id: 2, tenPhongBan: "Phòng 2", khuVuc: "Khu A", trangThai: "Sẵn sàng" },
+    { id: 3, tenPhongBan: "Phòng 3", khuVuc: "Khu B", trangThai: "Đang bảo trì" },
+    { id: 4, tenPhongBan: "Phòng VIP 2", khuVuc: "Khu B", trangThai: "Sẵn sàng" },
+    { id: 5, tenPhongBan: "Phòng 4", khuVuc: "Khu C", trangThai: "Đang sử dụng" },
+    { id: 6, tenPhongBan: "Phòng 5", khuVuc: "Khu C", trangThai: "Đang bảo trì" },
+    { id: 7, tenPhongBan: "Phòng 6", khuVuc: "Khu A", trangThai: "Sẵn sàng" },
+    { id: 8, tenPhongBan: "Phòng VIP 3", khuVuc: "Khu B", trangThai: "Đang sử dụng" },
+    { id: 9, tenPhongBan: "Phòng 7", khuVuc: "Khu C", trangThai: "Sẵn sàng" },
+    { id: 10, tenPhongBan: "Phòng 8", khuVuc: "Khu A", trangThai: "Đang bảo trì" },
+  ];
+
+  // Tính toán dữ liệu cho pagination
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentData = data.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (page) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   return (
     <div className="w-full flex p-4">
       {/* Sidebar with filters */}
@@ -53,41 +82,13 @@ export default function ManageRoomAndTable() {
           <div className="w-full">
             <Select>
               <SelectTrigger className="">
-                <SelectValue placeholder="Chon khu vưc" />
+                <SelectValue placeholder="Chọn khu vực" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>QUẬN GÒ VẤP</SelectLabel>
-                  <SelectItem value="est">
-                    * 62 Dương Quảng Hàm - Billiards Center{" "}
-                  </SelectItem>
-                  <SelectItem value="cst">
-                    * 48 Lê Lợi - Billiards Center{" "}
-                  </SelectItem>
-                  <SelectItem value="mst">
-                    * 144 Nguyễn Văn Lượng - Billiards Center
-                  </SelectItem>
-                </SelectGroup>
-                <SelectGroup>
-                  <SelectLabel>QUẬN BÌNH THẠNH</SelectLabel>
-                  <SelectItem value="gmt">
-                    * 15 Võ Duy Ninh - Billiards Center
-                  </SelectItem>
-                  <SelectItem value="cet">
-                    * 360 Lê Quang Định - Billiards Center
-                  </SelectItem>
-                  <SelectItem value="eet">
-                    * 99 Nguyễn Hữu Cảnh - Billiards Center
-                  </SelectItem>
-                </SelectGroup>
-                <SelectGroup>
-                  <SelectLabel>QUẬN TÂN BÌNH</SelectLabel>
-                  <SelectItem value="msk">
-                    * 662 Âu Cơ - Billiards Center
-                  </SelectItem>
-                  <SelectItem value="ist">
-                    * 72 Ba Vân - Billiards Center
-                  </SelectItem>
+                  <SelectItem value="est">* 62 Dương Quảng Hàm</SelectItem>
+                  <SelectItem value="cst">* 48 Lê Lợi</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -95,26 +96,26 @@ export default function ManageRoomAndTable() {
         </div>
       </div>
 
-      {/* Main content with table and actions */}
+      {/* Main Content */}
       <div className="w-[80%]">
         <div className="flex justify-between items-center bg-blue-50 p-6 rounded-lg shadow-sm mb-4">
           <h2 className="font-bold text-2xl text-black">Phòng/Bàn</h2>
-          <div className=" flex space-x-4">
-            <Button className="bg-green-500 text-white rounded-lg px-4 flex items-center space-x-2">
+          <div className="flex space-x-4">
+            <Button
+              className="bg-green-500 text-white rounded-lg px-4 flex items-center space-x-2"
+              onClick={() => setShowAddForm(true)}
+            >
               <Plus className="w-5 h-5" />
               <span>Thêm mới</span>
             </Button>
-            <Button className="bg-yellow-500 text-white rounded-lg px-4 flex items-center space-x-2">
-              <File className="w-5 h-5" />
-              <span>Xoá</span>
-            </Button>
           </div>
         </div>
+
         {/* Table */}
         <Table className="bg-white rounded-lg shadow-sm">
           <TableHeader>
             <TableRow className="bg-blue-100 text-gray-700">
-              {["STT", "Tên Phòng/Bàn", "Khu vưc", "Trang thái", ""].map(
+              {["STT", "Tên Phòng/Bàn", "Khu vực", "Trạng thái", ""].map(
                 (header, index) => (
                   <TableHead key={index} className="font-semibold py-2 px-4">
                     {header}
@@ -124,72 +125,16 @@ export default function ManageRoomAndTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {[
-              {
-                id: 1,
-                tenPhongBan: "Phòng VIP 1",
-                khuVuc: "Khu A",
-                trangThai: "Đang sử dụng",
-                edit: "Edit",
-              },
-              {
-                id: 2,
-                tenPhongBan: "Phòng 2",
-                khuVuc: "Khu A",
-                trangThai: "Sẵn sàng",
-                edit: "Edit",
-              },
-              {
-                id: 3,
-                tenPhongBan: "Phòng 3",
-                khuVuc: "Khu B",
-                trangThai: "Đang bảo trì",
-                edit: "Edit",
-              },
-              {
-                id: 4,
-                tenPhongBan: "Phòng VIP 2",
-                khuVuc: "Khu B",
-                trangThai: "Sẵn sàng",
-                edit: "Edit",
-              },
-              {
-                id: 5,
-                tenPhongBan: "Phòng 4",
-                khuVuc: "Khu C",
-                trangThai: "Đang sử dụng",
-                edit: "Edit",
-              },
-              {
-                id: 6,
-                tenPhongBan: "Phòng 5",
-                khuVuc: "Khu C",
-                trangThai: "Đang bảo trì",
-                edit: "Edit",
-              },
-              {
-                id: 7,
-                tenPhongBan: "Phòng 6",
-                khuVuc: "Khu A",
-                trangThai: "Sẵn sàng",
-                edit: "Edit",
-              },
-              {
-                id: 8,
-                tenPhongBan: "Phòng VIP 3",
-                khuVuc: "Khu B",
-                trangThai: "Đang sử dụng",
-                edit: "Edit",
-              },
-            ].map((item, index) => (
+            {currentData.map((item, index) => (
               <TableRow key={index} className="hover:bg-gray-50">
-                <TableCell className="py-2 px-4">{item.id}</TableCell>
+                <TableCell className="py-2 px-4">
+                  {startIndex + index + 1}
+                </TableCell>
                 <TableCell className="py-2 px-4">{item.tenPhongBan}</TableCell>
                 <TableCell className="py-2 px-4">{item.khuVuc}</TableCell>
                 <TableCell className="py-2 px-4">{item.trangThai}</TableCell>
                 <TableCell>
-                  <DialogDemo triggerLabel="Edit" />{" "}
-                  {/* DialogDemo with custom trigger label */}
+                  <DialogTable triggerLabel="Edit" />
                 </TableCell>
               </TableRow>
             ))}
@@ -197,29 +142,48 @@ export default function ManageRoomAndTable() {
         </Table>
 
         {/* Pagination */}
-        <Pagination className="mt-6 justify-start">
-          <PaginationContent className="flex items-center justify-start space-x-2">
+        <Pagination className="mt-6">
+          <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious
+                onClick={() => handlePageChange(currentPage - 1)}
+              />
             </PaginationItem>
+            {Array.from({ length: totalPages }, (_, i) => (
+              <PaginationItem key={i}>
+                <PaginationLink
+                  onClick={() => handlePageChange(i + 1)}
+                  isActive={currentPage === i + 1}
+                >
+                  {i + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
             <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#" isActive>
-                2
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationEllipsis />
-            <PaginationItem>
-              <PaginationNext href="#" />
+              <PaginationNext
+                onClick={() => handlePageChange(currentPage + 1)}
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
       </div>
+
+
+      {showAddForm && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+
+          <AddRoomTableForm />
+          <div className="flex justify-end mt-4">
+            <Button
+              onClick={() => setShowAddForm(false)}
+              className="bg-gray-500 text-white hover:bg-gray-600"
+            >
+              Đóng
+            </Button>
+          </div>
+        </div>
+
+      )}
     </div>
   );
 }

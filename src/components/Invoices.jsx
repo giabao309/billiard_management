@@ -8,7 +8,6 @@ import InvoiceDetailCard from "@/components/InvoiceDetailCard";
 export default function Invoices() {
   const {
     selectedTable,
-    setSelectedTable,
     openTable,
     invoices,
     branchName,
@@ -25,15 +24,9 @@ export default function Invoices() {
   const handleOpenTable = async () => {
     if (selectedTable && selectedTable.id) {
       try {
-        const updatedTable = await openTable(selectedTable.id);
-        const createInvoice = await createInvoices(
-          branch_id,
-          employeeID,
-          selectedTable.id,
-          datetime
-        );
+        await openTable(selectedTable.id);
+        await createInvoices(branch_id, employeeID, selectedTable.id, datetime);
         window.location.reload();
-        setSelectedTable(updatedTable);
       } catch (error) {
         console.error("Error opening table:", error);
       }
@@ -96,6 +89,44 @@ export default function Invoices() {
                 </div>
               </div>
             </div>
+          ) : selectedTable.status_id === 3 ? (
+            <div className="flex flex-col gap-y-4 items-center justify-center mt-12">
+              <div className="mb-8">
+                <span>Trạng thái: </span>{" "}
+                <span className="font-bold text-xl p-4 rounded-lg">
+                  {selectedTable.status}
+                </span>
+              </div>
+
+              <Button
+                className="w-[12rem] h-[4rem] bg-[#5181F5] text-xl"
+                onClick={handleOpenTable}
+              >
+                Mở bàn
+              </Button>
+              <Button
+                className="w-[12rem] h-[4rem] bg-gray-500 text-xl"
+                // onClick={handleOpenTable}
+              >
+                Huỷ đặt bàn
+              </Button>
+            </div>
+          ) : selectedTable.status_id === 4 ? (
+            <div className="flex flex-col gap-y-4 items-center justify-center mt-12">
+              <div className="mb-8">
+                <span>Trạng thái: </span>{" "}
+                <span className="font-bold text-xl p-4 rounded-lg">
+                  {selectedTable.status}
+                </span>
+              </div>
+
+              <Button
+                className="w-[12rem] h-[4rem] bg-[#5181F5] text-xl"
+                disabled={true}
+              >
+                Mở bàn
+              </Button>
+            </div>
           ) : (
             <div className="flex flex-col gap-y-4 items-center justify-center mt-12">
               <div className="mb-8">
@@ -107,7 +138,7 @@ export default function Invoices() {
 
               <Button
                 className="w-[12rem] h-[4rem] bg-[#5181F5] text-xl"
-                onClick={handleOpenTable} // Gọi hàm mở bàn khi nhấn
+                onClick={handleOpenTable}
               >
                 Mở bàn
               </Button>

@@ -22,7 +22,7 @@ export default function MenuItems({ categories }) {
   const handleItemsClick = (item) => {
     toast({
       title: "Thông báo",
-      description: `Thêm thành công ${item.name}`,
+      description: `Thêm thành công ${item.img}`,
     });
   };
 

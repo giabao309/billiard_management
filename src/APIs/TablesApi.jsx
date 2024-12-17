@@ -46,6 +46,28 @@ export const useGetTableByBranch = (branch_id) => {
   return { tables };
 };
 
+export const useGetTableAvailable = (branch_id) => {
+  const [tableAvailable, setTableAvailable] = useState([]);
+
+  useEffect(() => {
+    const fetchTables = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/tables/available",
+          { branch_id }
+        );
+        setTableAvailable(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchTables();
+  }, [branch_id]);
+
+  return { tableAvailable };
+};
+
 export const useGetTableByBranchAndFloor = (branch_id, floor_id) => {
   const [tableByFloor, setTableByFloor] = useState([]);
 
@@ -151,4 +173,23 @@ export const useUpdateCloseTable = () => {
   };
 
   return { message, closeTable };
+};
+
+export const useUpdateTransferTable = () => {
+  const [message, setMessage] = useState("");
+
+  const transferTable = async (table, invoice) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/tables/transfer",
+        { table_id: table, invoices_id: invoice }
+      );
+
+      setMessage("Thành công");
+    } catch (err) {
+      setMessage("Có lỗi xảy ra");
+    }
+  };
+
+  return { message, transferTable };
 };

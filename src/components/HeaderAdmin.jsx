@@ -37,10 +37,8 @@ export default function Header() {
 
   const menuItems = [
     { title: "Tổng quan", href: "/admin" },
-    { title: "Quản lý chi nhánh", href: "/admin#" },
+    { title: "Quản lý chi nhánh", href: "/admin/managebranch" },
     { title: "Quản lý người dùng", href: "/admin/usermanage" },
-    { title: "Quản lý bàn", href: "/admin#" },
-    { title: "Quản lý kho", href: "/admin/storagemanage" },
   ];
 
   return (
