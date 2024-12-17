@@ -1,21 +1,34 @@
 import { createContext, useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { useGetFloorByBranch } from "@/APIs/BilliardApi";
-import { useGetTableByBranch } from "@/APIs/TablesApi";
+import {
+  useGetTableByBranch,
+  useGetTableByBranchAndFloor,
+  useGetTableStatus,
+  useGetTableByBranchAndStatus,
+  useUpdateOpenTable,
+  useUpdateCloseTable,
+} from "@/APIs/TablesApi";
 import {
   useGetMenuTypes,
   useGetMenuItems,
   useGetMenuCategories,
 } from "@/APIs/ServiceApi";
-import { useUpdateOpenTable } from "@/APIs/TablesApi";
+
 import {
   useGetInvoiceByTableID,
   useGetInvoiceDetailByID,
   useGetPromotion,
+  createInvoices,
+  updateInvoicePayment,
 } from "@/APIs/InvoicesApi";
 
 export const TableContext = createContext({});
 
 export const TableProvider = ({ children }) => {
+  //TOAST
+  const { toast } = useToast();
+
   //GET LOCAL
   const branchName = localStorage.getItem("branchName");
   const branch_id = localStorage.getItem("branchID");
@@ -24,16 +37,41 @@ export const TableProvider = ({ children }) => {
 
   // TABLE
   const { floors } = useGetFloorByBranch(branch_id);
+  const [floor, setFloor] = useState("all");
+  const { tableByFloor } = useGetTableByBranchAndFloor(branch_id, floor);
+
+  const { status } = useGetTableStatus();
+  const [statu, setStatus] = useState("all");
+  const { tableByStatus } = useGetTableByBranchAndStatus(branch_id, statu);
+
   const { tables } = useGetTableByBranch(branch_id);
 
-  const [selectedTable, setSelectedTable] = useState(null);
+  const [getTable, setGetTable] = useState(tables);
 
+  useEffect(() => {
+    if (statu === "all") {
+      setGetTable(tables);
+    } else {
+      setGetTable(tableByStatus);
+    }
+  }, [statu, tables, tableByStatus]);
+
+  useEffect(() => {
+    if (floor === "all") {
+      setGetTable(tables);
+    } else {
+      setGetTable(tableByFloor);
+    }
+  }, [floor, tables, tableByFloor]);
+
+  const [selectedTable, setSelectedTable] = useState(null);
   const { categories } = useGetMenuCategories();
   const { types } = useGetMenuTypes();
   const { items } = useGetMenuItems();
 
   //INVOICES
   const { openTable } = useUpdateOpenTable();
+  const { closeTable } = useUpdateCloseTable();
   const { invoices } = useGetInvoiceByTableID(selectedTable?.id);
   const { invoiceDetail } = useGetInvoiceDetailByID(invoices?.id);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -50,7 +88,9 @@ export const TableProvider = ({ children }) => {
   }, []);
 
   const date = currentDate.toLocaleDateString("en-CA");
-  const time = currentDate.toLocaleTimeString("en-GB");
+  const timer = currentDate.toLocaleTimeString("en-GB");
+
+  const [time, setTime] = useState(timer);
 
   const datetime = `${date} ${time}`;
 
@@ -103,6 +143,7 @@ export const TableProvider = ({ children }) => {
   return (
     <TableContext.Provider
       value={{
+        toast,
         employeeID,
         employeeName,
         branchName,
@@ -115,11 +156,13 @@ export const TableProvider = ({ children }) => {
         selectedTable,
         setSelectedTable,
         openTable,
+        closeTable,
         invoices,
         invoiceDetail,
         setPlayTime,
         playTime,
         setTotalAmount,
+        createInvoices,
         totalAmount,
         promotion,
         date,
@@ -127,6 +170,12 @@ export const TableProvider = ({ children }) => {
         formattedTime,
         datetime,
         difference,
+        getTable,
+        setGetTable,
+        setFloor,
+        status,
+        setStatus,
+        updateInvoicePayment,
       }}
     >
       {children}

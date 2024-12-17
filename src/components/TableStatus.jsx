@@ -1,20 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { useGetTableStatus } from "@/APIs/TablesApi";
 import { Button } from "@/components/ui/button";
+import { TableContext } from "@/Context/TableContext";
 
-export default function TableStatus({ setStatus }) {
-  const { status } = useGetTableStatus();
-
-  const handleClick = (statusName) => {
-    setStatus(statusName);
-  };
+export default function TableStatus() {
+  const { status, setStatus } = useContext(TableContext);
 
   return (
     <div className="flex flex-col gap-y-4">
       <Button
         variant="ghost"
         className="border"
-        onClick={() => handleClick("all")}
+        onClick={() => setStatus("all")}
       >
         Tất cả
       </Button>
@@ -24,7 +21,7 @@ export default function TableStatus({ setStatus }) {
           key={st.id}
           variant="ghost"
           className="border"
-          onClick={() => handleClick(st.id)}
+          onClick={() => setStatus(st.id)}
         >
           {st.name}
         </Button>

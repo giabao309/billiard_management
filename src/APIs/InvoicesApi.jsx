@@ -62,6 +62,25 @@ export const createInvoices = async (
   );
 };
 
+export const updateInvoicePayment = async (
+  customer_id,
+  playtime,
+  promotion_id,
+  total_cost,
+  invoices_id
+) => {
+  const response = await axios.post(
+    "http://localhost:5000/api/invoices/payment",
+    {
+      customer_id,
+      playtime,
+      promotion_id,
+      total_cost,
+      invoices_id,
+    }
+  );
+};
+
 export const useGetPromotion = () => {
   const [promotion, setPromotion] = useState(null);
 

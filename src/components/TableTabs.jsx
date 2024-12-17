@@ -1,33 +1,38 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TableStatus from "@/components/TableStatus";
 import TableCards from "@/components/TableCards";
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { TableContext } from "@/Context/TableContext";
 
-export default function TableTabs({ setSelectedTable }) {
-  const { floors, tables } = useContext(TableContext);
-  const [datastatus, setDataStatus] = useState("all");
-  const filteredTables =
-    datastatus === "all"
-      ? tables
-      : tables.filter((table) => table.status_id === datastatus);
+export default function TableTabs() {
+  const { floors, setFloor } = useContext(TableContext);
 
   return (
     <Tabs defaultValue="all" className="flex flex-col">
       <TabsList className="flex justify-around w-3/4 bg-[#5181F5] text-black mb-2">
-        <TabsTrigger key="all" className="w-full" value="all">
+        <TabsTrigger
+          key="all"
+          className="w-full"
+          value="all"
+          onClick={() => setFloor("all")}
+        >
           Tất cả
         </TabsTrigger>
         {floors.map((floor) => (
-          <TabsTrigger key={floor.id} className="w-full" value={floor.id}>
+          <TabsTrigger
+            key={floor.id}
+            className="w-full"
+            value={floor.id}
+            onClick={() => setFloor(floor.id)}
+          >
             {floor.name}
           </TabsTrigger>
         ))}
       </TabsList>
 
       <TabsContent key="all" className="flex flex-row gap-x-4 mt-0" value="all">
-        <TableStatus setStatus={setDataStatus} />
-        <TableCards tables={filteredTables} status={datastatus} />
+        <TableStatus />
+        <TableCards />
       </TabsContent>
 
       {floors.map((floor) => (
@@ -36,12 +41,8 @@ export default function TableTabs({ setSelectedTable }) {
           className="flex flex-row gap-x-4 mt-0"
           value={floor.id}
         >
-          <TableStatus setStatus={setDataStatus} />
-          <TableCards
-            tables={filteredTables.filter(
-              (table) => table.floor_id === floor.id
-            )}
-          />
+          <TableStatus />
+          <TableCards />
         </TabsContent>
       ))}
     </Tabs>

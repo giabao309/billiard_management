@@ -4,7 +4,6 @@ import { Payment } from "@/components/Payment";
 import { TransferTable } from "@/components/TransferTable";
 import { TableContext } from "@/Context/TableContext";
 import InvoiceDetailCard from "@/components/InvoiceDetailCard";
-import { createInvoices } from "@/APIs/InvoicesApi";
 
 export default function Invoices() {
   const {
@@ -20,6 +19,7 @@ export default function Invoices() {
     employeeID,
     datetime,
     totalAmount,
+    createInvoices,
   } = useContext(TableContext);
 
   const handleOpenTable = async () => {

@@ -1,15 +1,11 @@
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import TableImage from "@/assets/table.png";
-import { useToast } from "@/hooks/use-toast";
 import { useState, useContext } from "react";
 import { TableContext } from "@/Context/TableContext";
 import { Check } from "lucide-react";
 
-export default function TableCards({ tables }) {
-  const { toast } = useToast();
-
-  const { setSelectedTable } = useContext(TableContext);
+export default function TableCards() {
+  const { setSelectedTable, getTable, toast } = useContext(TableContext);
 
   // Trạng thái để theo dõi bàn đang chọn
   const [selectedTableId, setSelectedTableId] = useState(null);
@@ -17,16 +13,16 @@ export default function TableCards({ tables }) {
   const handleCardClick = (table) => {
     setSelectedTable(table);
     setSelectedTableId(table.id);
-    // toast({
-    //   title: "Thông báo",
-    //   description: `Đã chọn ${table.name} `,
-    // });
+    toast({
+      title: "Thông báo",
+      description: `Đã chọn ${table.name} `,
+    });
   };
 
   return (
     <div className="flex gap-6 max-w-[85%] max-h-[65vh] flex-wrap overflow-auto">
-      {tables && tables.length > 0 ? (
-        tables.map((table) => {
+      {getTable && getTable.length > 0 ? (
+        getTable.map((table) => {
           let statusDot;
           if (table.status_id === 2) {
             statusDot = "#66CC66";

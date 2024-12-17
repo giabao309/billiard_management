@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -14,15 +15,14 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { User, Search } from "lucide-react";
+import { User } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FaMoneyBill } from "react-icons/fa";
 import { TableContext } from "@/Context/TableContext";
-import { useGetEmployeeByID, useSearchCustomer } from "@/APIs/UserApi";
+import { useSearchCustomer } from "@/APIs/UserApi";
 import PrintableInvoice from "./PrintInvoices";
 import CSS from "@/components/PrintInvoiceCSS";
 
@@ -30,7 +30,6 @@ export function Payment() {
   const {
     selectedTable,
     invoiceDetail,
-    formattedTime,
     branchName,
     employeeName,
     totalAmount,
@@ -38,10 +37,19 @@ export function Payment() {
     difference,
     invoices,
     promotion,
+    closeTable,
+    updateInvoicePayment,
   } = useContext(TableContext);
 
-  const printRef = useRef();
+  const title = [
+    { name: "Tên sản phẩm" },
+    { name: "Số lượng" },
+    { name: "Đơn giá" },
+    { name: "Thành tiền" },
+  ];
 
+  //IN HOÁ ĐƠN
+  const printRef = useRef();
   const handlePrint = () => {
     const printContent = printRef.current;
     const newWin = window.open("");
@@ -64,41 +72,39 @@ export function Payment() {
     newWin.close();
   };
 
-  const title = [
-    { name: "Tên sản phẩm" },
-    { name: "Số lượng" },
-    { name: "Đơn giá" },
-    { name: "Thành tiền" },
-  ];
-
+  //HÀM TÍNH TIỀN
   const totalInvoiceDetail = (quantity, price) => {
     return quantity * price;
   };
-
-  const [selectedValue, setSelectedValue] = useState(0); // State để lưu giá trị chọn
-
+  const [selectedValue, setSelectedValue] = useState(0);
+  const [selectedPromoId, setSelectedPromoId] = useState(6);
   const handleSelectChange = (value) => {
-    setSelectedValue(value); // Cập nhật giá trị khi chọn
-  };
+    setSelectedValue(value);
 
-  //Hàm làm tròn
+    // Tìm promo.id tương ứng với value đã chọn
+    const selectedPromo = promotion.find((promo) => promo.value === value);
+    if (selectedPromo) {
+      setSelectedPromoId(selectedPromo.id); // Cập nhật promo.id
+    } else {
+      setSelectedPromoId(null); // Xóa giá trị nếu không tìm thấy
+    }
+  };
+  useEffect(() => {
+    setSelectedPromoId(6);
+  }, []);
+
   const formatNum = (num) => {
     const rounded = num.toFixed(3);
     const roundedNumber = parseFloat(rounded);
     const finalNumber = Math.round(roundedNumber / 1000) * 1000;
     return finalNumber;
   };
-
-  //Tính bill kèm giảm giá
   const [totalBill, setTotalBill] = useState(totalAmount);
   const totalPromotion = totalAmount - totalAmount * (selectedValue / 100);
-
   useEffect(() => {
     if (selectedValue === 0) {
-      // Nếu không có giảm giá, giữ nguyên giá trị tổng tiền
       setTotalBill(totalAmount);
     } else {
-      // Nếu có giảm giá, áp dụng và làm tròn
       setTotalBill(formatNum(totalPromotion));
     }
   }, [selectedValue, totalAmount]);
@@ -109,10 +115,12 @@ export function Payment() {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const { customer } = useSearchCustomer(query);
   useEffect(() => {
+    setSelectedCustomerId(null);
+
     if (customer) {
       setSearchResults(customer);
     }
-  }, [customer]);
+  }, [customer, selectedCustomerId]);
   const handleChange = (event) => {
     setQuery(event.target.value);
   };
@@ -120,6 +128,19 @@ export function Payment() {
     setQuery(customerName); // Cập nhật giá trị input với tên khách hàng đã chọn
     setSelectedCustomerId(customerID);
     setSearchResults([]); // Ẩn danh sách tìm kiếm
+  };
+
+  //Hàm Thanh toán
+  const handlePayment = async () => {
+    const updatedTable = await closeTable(selectedTable.id);
+    const updateInvoice = await updateInvoicePayment(
+      selectedCustomerId,
+      difference,
+      selectedPromoId,
+      totalBill,
+      invoices.id
+    );
+    window.location.reload();
   };
 
   return (
@@ -139,7 +160,7 @@ export function Payment() {
         <div className="flex">
           <div className="w-[60%] h-[30rem]">
             <div className="flex gap-x-4">
-              <User /> <span>Khách lẻ </span>
+              <User /> <span>Khách lẻ {selectedCustomerId}</span>
             </div>
             <div className="flex gap-x-4 mt-4 text-xl">
               <span>Mã hoá đơn: HD00{invoices.id}</span>
@@ -263,7 +284,7 @@ export function Payment() {
                   <SelectContent>
                     <SelectGroup>
                       {promotion.map((promo) => (
-                        <SelectItem key={promo.value} value={promo.value}>
+                        <SelectItem key={promo.id} value={promo.value}>
                           {promo.name}
                         </SelectItem>
                       ))}
@@ -301,12 +322,15 @@ export function Payment() {
           >
             In hoá đơn
           </Button>
-          <Button
-            type="submit"
-            className="bg-[#31A300] hover:bg-gray-100 hover:text-black"
-          >
-            Thanh toán
-          </Button>
+          <DialogClose>
+            <Button
+              type="submit"
+              className="bg-[#31A300] hover:bg-gray-100 hover:text-black"
+              onClick={handlePayment}
+            >
+              Thanh toán
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

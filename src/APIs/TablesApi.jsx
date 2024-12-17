@@ -46,6 +46,50 @@ export const useGetTableByBranch = (branch_id) => {
   return { tables };
 };
 
+export const useGetTableByBranchAndFloor = (branch_id, floor_id) => {
+  const [tableByFloor, setTableByFloor] = useState([]);
+
+  useEffect(() => {
+    const fetchTables = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/tables/BranchAndFloor",
+          { branch_id, floor_id }
+        );
+        setTableByFloor(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchTables();
+  }, [branch_id, floor_id]);
+
+  return { tableByFloor };
+};
+
+export const useGetTableByBranchAndStatus = (branch_id, status_id) => {
+  const [tableByStatus, setTableByStatus] = useState([]);
+
+  useEffect(() => {
+    const fetchTables = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/tables/BranchAndStatus",
+          { branch_id, status_id }
+        );
+        setTableByStatus(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchTables();
+  }, [branch_id, status_id]);
+
+  return { tableByStatus };
+};
+
 export const useGetTableStatus = () => {
   const [status, setStatus] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -88,4 +132,23 @@ export const useUpdateOpenTable = () => {
   };
 
   return { message, openTable };
+};
+
+export const useUpdateCloseTable = () => {
+  const [message, setMessage] = useState("");
+
+  const closeTable = async (id) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/tables/closeTable",
+        { table_id: id }
+      );
+
+      setMessage("Thành công");
+    } catch (err) {
+      setMessage("Có lỗi xảy ra");
+    }
+  };
+
+  return { message, closeTable };
 };
