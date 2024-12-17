@@ -18,7 +18,7 @@ export default function ClientSection() {
       <div className="relative w-full h-[900px]">
         <img
           src={img_room}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover brightness-50"
           alt="Billiards hall"
         />
 

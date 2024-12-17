@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import AddStorage from "@/components/ui/add-form-storage";
 import {
   Table,
   TableBody,
@@ -20,12 +21,33 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-import { Search, File, Plus, Import } from "lucide-react";
-import { DialogDemo } from "@/components/Dialog";
+import { Search, File, Plus } from "lucide-react";
+import { DialogStorage } from "@/components/DialogStorage";
 
 export default function Storage() {
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
+  const data = [
+    { id: "INV001", name: "Sting", type: "Nước uống", cost: "8.000", sale: "20.000", stock: "30" },
+    { id: "INV002", name: "Coca-Cola", type: "Nước uống", cost: "10.000", sale: "25.000", stock: "50" },
+    { id: "INV003", name: "Pepsi", type: "Nước uống", cost: "9.000", sale: "22.000", stock: "40" },
+    { id: "INV004", name: "Bánh mì kẹp", type: "Đồ ăn nhanh", cost: "15.000", sale: "35.000", stock: "20" },
+
+  ];
+
+  const totalItems = data.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+
+  const currentItems = data.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
-    <div className="w-full flex p-4">
+    <div className="w-full flex p-4 relative">
       {/* Sidebar with filters */}
       <div className="w-[20%] flex flex-col space-y-6 mr-6">
         <div className="mb-4">
@@ -69,12 +91,15 @@ export default function Storage() {
         </div>
       </div>
 
-      {/* Main content with table and actions */}
+      {/* Main content */}
       <div className="w-[80%]">
         <div className="flex justify-between items-center bg-blue-50 p-6 rounded-lg shadow-sm mb-4">
-          <h2 className="font-bold text-2xl text-blue-600">Storage</h2>
-          <div className=" flex space-x-4">
-            <Button className="bg-green-500 text-white rounded-lg px-4 flex items-center space-x-2">
+          <h2 className="font-bold text-2xl text-black">Storage</h2>
+          <div className="flex space-x-4">
+            <Button
+              className="bg-green-500 text-white rounded-lg px-4 flex items-center space-x-2"
+              onClick={() => setShowAddForm(true)}
+            >
               <Plus className="w-5 h-5" />
               <span>Thêm mới</span>
             </Button>
@@ -84,189 +109,21 @@ export default function Storage() {
             </Button>
           </div>
         </div>
-        {/* Table */}
+
         <Table className="bg-white rounded-lg shadow-sm">
           <TableHeader>
             <TableRow className="bg-blue-100 text-gray-700">
-              {[
-                "Mã",
-                "Tên",
-                "Loại thực đơn",
-                "Giá vốn",
-                "Giá bán",
-                "Tồn kho",
-                "",
-              ].map((header, index) => (
-                <TableHead key={index} className="font-semibold py-2 px-4">
-                  {header}
-                </TableHead>
-              ))}
+              {["Mã", "Tên", "Loại thực đơn", "Giá vốn", "Giá bán", "Tồn kho", ""].map(
+                (header, index) => (
+                  <TableHead key={index} className="font-semibold py-2 px-4">
+                    {header}
+                  </TableHead>
+                )
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {[
-              {
-                id: "INV001",
-                name: "Sting",
-                type: "Nước uống",
-                cost: "8.000",
-                sale: "20.000",
-                stock: "30",
-              },
-              {
-                id: "INV002",
-                name: "Coca-Cola",
-                type: "Nước uống",
-                cost: "10.000",
-                sale: "25.000",
-                stock: "50",
-              },
-              {
-                id: "INV003",
-                name: "Pepsi",
-                type: "Nước uống",
-                cost: "9.000",
-                sale: "22.000",
-                stock: "40",
-              },
-              {
-                id: "INV004",
-                name: "Bánh mì kẹp",
-                type: "Đồ ăn nhanh",
-                cost: "15.000",
-                sale: "35.000",
-                stock: "20",
-              },
-              {
-                id: "INV001",
-                name: "Sting",
-                type: "Nước uống",
-                cost: "8.000",
-                sale: "20.000",
-                stock: "30",
-              },
-              {
-                id: "INV002",
-                name: "Coca-Cola",
-                type: "Nước uống",
-                cost: "10.000",
-                sale: "25.000",
-                stock: "50",
-              },
-              {
-                id: "INV003",
-                name: "Pepsi",
-                type: "Nước uống",
-                cost: "9.000",
-                sale: "22.000",
-                stock: "40",
-              },
-              {
-                id: "INV004",
-                name: "Bánh mì kẹp",
-                type: "Đồ ăn nhanh",
-                cost: "15.000",
-                sale: "35.000",
-                stock: "20",
-              },
-              {
-                id: "INV001",
-                name: "Sting",
-                type: "Nước uống",
-                cost: "8.000",
-                sale: "20.000",
-                stock: "30",
-              },
-              {
-                id: "INV002",
-                name: "Coca-Cola",
-                type: "Nước uống",
-                cost: "10.000",
-                sale: "25.000",
-                stock: "50",
-              },
-              {
-                id: "INV003",
-                name: "Pepsi",
-                type: "Nước uống",
-                cost: "9.000",
-                sale: "22.000",
-                stock: "40",
-              },
-              {
-                id: "INV004",
-                name: "Bánh mì kẹp",
-                type: "Đồ ăn nhanh",
-                cost: "15.000",
-                sale: "35.000",
-                stock: "20",
-              },
-              {
-                id: "INV001",
-                name: "Sting",
-                type: "Nước uống",
-                cost: "8.000",
-                sale: "20.000",
-                stock: "30",
-              },
-              {
-                id: "INV002",
-                name: "Coca-Cola",
-                type: "Nước uống",
-                cost: "10.000",
-                sale: "25.000",
-                stock: "50",
-              },
-              {
-                id: "INV003",
-                name: "Pepsi",
-                type: "Nước uống",
-                cost: "9.000",
-                sale: "22.000",
-                stock: "40",
-              },
-              {
-                id: "INV004",
-                name: "Bánh mì kẹp",
-                type: "Đồ ăn nhanh",
-                cost: "15.000",
-                sale: "35.000",
-                stock: "20",
-              },
-              {
-                id: "INV001",
-                name: "Sting",
-                type: "Nước uống",
-                cost: "8.000",
-                sale: "20.000",
-                stock: "30",
-              },
-              {
-                id: "INV002",
-                name: "Coca-Cola",
-                type: "Nước uống",
-                cost: "10.000",
-                sale: "25.000",
-                stock: "50",
-              },
-              {
-                id: "INV003",
-                name: "Pepsi",
-                type: "Nước uống",
-                cost: "9.000",
-                sale: "22.000",
-                stock: "40",
-              },
-              {
-                id: "INV004",
-                name: "Bánh mì kẹp",
-                type: "Đồ ăn nhanh",
-                cost: "15.000",
-                sale: "35.000",
-                stock: "20",
-              },
-              // Add more rows as needed
-            ].map((item, index) => (
+            {currentItems.map((item, index) => (
               <TableRow key={index} className="hover:bg-gray-50">
                 <TableCell className="py-2 px-4">{item.id}</TableCell>
                 <TableCell className="py-2 px-4">{item.name}</TableCell>
@@ -275,8 +132,7 @@ export default function Storage() {
                 <TableCell className="py-2 px-4">{item.sale}</TableCell>
                 <TableCell className="py-2 px-4">{item.stock}</TableCell>
                 <TableCell>
-                  <DialogDemo triggerLabel="Edit" />{" "}
-                  {/* DialogDemo with custom trigger label */}
+                  <DialogStorage triggerLabel="Edit" />
                 </TableCell>
               </TableRow>
             ))}
@@ -287,26 +143,49 @@ export default function Storage() {
         <Pagination className="mt-6 justify-start">
           <PaginationContent className="flex items-center justify-start space-x-2">
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious
+                href="#"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              />
             </PaginationItem>
+            {Array.from({ length: totalPages }).map((_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  href="#"
+                  isActive={currentPage === index + 1}
+                  onClick={() => setCurrentPage(index + 1)}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
             <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#" isActive>
-                2
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationEllipsis />
-            <PaginationItem>
-              <PaginationNext href="#" />
+              <PaginationNext
+                href="#"
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
       </div>
+
+
+      {showAddForm && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+
+          <AddStorage />
+          <div className="flex justify-end mt-4">
+            <Button
+              onClick={() => setShowAddForm(false)}
+              className="bg-gray-500 text-white hover:bg-gray-600"
+            >
+              Đóng
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
