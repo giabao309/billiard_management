@@ -5,6 +5,7 @@ import ClientLayoutLogin from "@/layouts/Client/ClientLayoutLogin";
 import ClientInformations from "@/layouts/Client/ClientLayoutInformation";
 import ClientBooking from "@/layouts/Client/ClientBookingLayout";
 import InforBookingLayout from "@/layouts/Client/InforBookingLayout";
+import ClientIvoices from "@/layouts/Client/ClientViewInvoice";
 import { BookingProvider } from "@/Context/BookingContext";
 export default function ClientRoute() {
   return (
@@ -12,7 +13,8 @@ export default function ClientRoute() {
       <Routes>
         <Route path="/*" element={<ClientLayout />} />
         <Route path="/client/*" element={<ClientLayoutLogin />} />
-        <Route path="/informations/*" element={<ClientInformations />} />
+        <Route path="/informations" element={<ClientInformations />} />
+        <Route path="/invoicesView" element={<ClientIvoices />} />
         <Route path="/booking" element={<ClientBooking />} />
         <Route path="/inforbooking" element={<InforBookingLayout />} />
       </Routes>

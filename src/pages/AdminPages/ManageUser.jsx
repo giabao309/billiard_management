@@ -3,10 +3,10 @@ import { AiOutlineHome, AiOutlineTable } from "react-icons/ai";
 import { FaWarehouse } from "react-icons/fa";
 import Storage from "./Storage";
 import ManageEmployee from "./ManageStaf";
-import AddFormTableRoom from "@/components/ui/add-form-tableRoom";
+import ManageCustomer from "./ManageCustomer";
 
 export default function ManageEachBranch() {
-  const [activeSection, setActiveSection] = useState("employee");
+  const [activeSection, setActiveSection] = useState("customer");
 
   const sidebarItems = [
     {
@@ -60,7 +60,7 @@ export default function ManageEachBranch() {
       {/* Main Content */}
       <main className="flex-grow p-8">
         {/* Render Content Based on Active Section */}
-        {activeSection === "customer" && <Storage />}
+        {activeSection === "customer" && <ManageCustomer />}
         {activeSection === "employee" && <ManageEmployee />}
         {/* {activeSection === "floors" && }  */}
       </main>

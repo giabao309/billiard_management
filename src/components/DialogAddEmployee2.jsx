@@ -1,9 +1,11 @@
+import { Button } from "@/components/ui/button";
 import React, { useContext, useState } from "react";
 import { ManageContext } from "@/Context/ManageContext";
-import { Button } from "@/components/ui/button";
+import { Search, File, Plus } from "lucide-react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -23,16 +25,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function DialogDemo({ selectedEmployee }) {
-  const { branch, shifts, updateEmployeeManage, deleteEmployee } =
-    useContext(ManageContext);
+export default function AddEmployee({ selectedEmployee }) {
+  const { branch, shifts, addEmployee } = useContext(ManageContext);
 
   const [formData, setFormData] = useState({
     user_id: selectedEmployee?.user_id || "",
     employee_id: selectedEmployee?.employee_id || "",
-    email: selectedEmployee?.email || "",
-    name: selectedEmployee?.name || "",
-    phone: selectedEmployee?.phone || "",
     branch: selectedEmployee?.branch_id || "",
     shift: selectedEmployee?.shift_id || "",
     salary: selectedEmployee?.salary || "",
@@ -50,68 +48,37 @@ export function DialogDemo({ selectedEmployee }) {
   };
 
   const handleSave = () => {
-    updateEmployeeManage(
+    console.log("Dữ liệu form employee id:", formData.user_id);
+    console.log("Dữ liệu form:", formData.branch);
+    console.log("Dữ liệu form:", formData.shift);
+    console.log("Dữ liệu form:", formData.salary);
+    addEmployee(
       formData.branch,
       formData.shift,
       formData.salary,
-      formData.employee_id
+      formData.user_id
     );
   };
-
-  const handleDelete = () => {
-    deleteEmployee(formData.user_id, formData.employee_id);
-  };
-
   return (
-    <Dialog className="p-8">
+    <Dialog>
       <DialogTrigger>
-        <Button variant="outline">Edit</Button>
+        <Button variant="outline" className="bg-green-500 text-white">
+          <Plus className="w-5 h-5" />
+          <span>Thêm</span>
+        </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] rounded-lg shadow-lg border border-gray-200">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">
-            Chỉnh sửa thông tin
-          </DialogTitle>
-        </DialogHeader>
+      {selectedEmployee ? (
+        <DialogContent className="sm:max-w-[500px] rounded-lg shadow-lg border border-gray-200">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold">
+              Thêm {selectedEmployee.name}
+            </DialogTitle>
+            <DialogDescription className="text-sm text-gray-500">
+              Email: {selectedEmployee.email}
+            </DialogDescription>
+          </DialogHeader>
 
-        {selectedEmployee ? (
           <div className="grid gap-4 py-4">
-            {/* Gmail Field */}
-            <div className="flex flex-col gap-2">
-              <Label className="text-gray-700 font-medium">Gmail</Label>
-              <Input
-                id="email"
-                name="email" // Thêm name để xác định trường cần cập nhật
-                className="border rounded-md p-2"
-                value={formData.email}
-                readOnly
-              />
-            </div>
-
-            {/* Name Field */}
-            <div className="flex flex-col gap-2">
-              <Label className="text-gray-700 font-medium">Tên</Label>
-              <Input
-                id="name"
-                name="name" // Thêm name
-                className="border rounded-md p-2"
-                value={formData.name}
-                readOnly
-              />
-            </div>
-
-            {/* Phone Number Field */}
-            <div className="flex flex-col gap-2">
-              <Label className="text-gray-700 font-medium">SĐT</Label>
-              <Input
-                id="phone"
-                name="phone" // Thêm name
-                className="border rounded-md p-2"
-                value={formData.phone}
-                readOnly
-              />
-            </div>
-
             {/* Branch Field with Select */}
             <div className="flex flex-col gap-2">
               <Label htmlFor="branch" className="text-gray-700 font-medium">
@@ -168,29 +135,22 @@ export function DialogDemo({ selectedEmployee }) {
               />
             </div>
           </div>
-        ) : (
-          ""
-        )}
 
-        <DialogFooter className="pt-4">
-          <DialogClose className="flex gap-x-4">
-            <Button
-              type="submit"
-              className="bg-blue-600 text-white rounded-lg px-4 py-2"
-              onClick={handleDelete}
-            >
-              Xoá
-            </Button>
-            <Button
-              type="submit"
-              className="bg-blue-600 text-white rounded-lg px-4 py-2"
-              onClick={handleSave}
-            >
-              Lưu thay đổi
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
+          <DialogFooter className="pt-4">
+            <DialogClose>
+              <Button
+                type="submit"
+                className="bg-blue-600 text-white rounded-lg px-4 py-2"
+                onClick={handleSave}
+              >
+                Thêm
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      ) : (
+        ""
+      )}
     </Dialog>
   );
 }

@@ -94,7 +94,7 @@ export default function HeaderClientLogin() {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <UserRoundPen />
-              <a href="/client/informations" className="cursor-pointer">
+              <a href="/informations" className="cursor-pointer">
                 Thông tin
               </a>
             </DropdownMenuItem>

@@ -5,6 +5,9 @@ import {
   updateTableManage,
   useGetShifts,
   updateEmployeeManage,
+  useGetCustomer,
+  addEmployee,
+  deleteEmployee,
 } from "@/APIs/Manage";
 import { useGetTableStatus, useGetTableType } from "@/APIs/TablesApi";
 import { useGetBranch } from "@/APIs/BilliardApi";
@@ -18,6 +21,7 @@ export const ManageProvider = ({ children }) => {
   const { types } = useGetTableType();
   const { branch } = useGetBranch();
   const { shifts } = useGetShifts();
+  const { customers } = useGetCustomer();
 
   return (
     <ManageContext.Provider
@@ -30,6 +34,9 @@ export const ManageProvider = ({ children }) => {
         branch,
         shifts,
         updateEmployeeManage,
+        customers,
+        addEmployee,
+        deleteEmployee,
       }}
     >
       {children}

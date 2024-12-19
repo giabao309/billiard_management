@@ -38,6 +38,84 @@ export const useGetShifts = () => {
   return { shifts };
 };
 
+export const useGetCustomerManage = () => {
+  const [customer, setTables] = useState([]);
+
+  const fetchTables = async () => {
+    const response = await axios.get(
+      "http://localhost:5000/api/manage/customers"
+    );
+    setTables(response.data);
+  };
+
+  useEffect(() => {
+    fetchTables();
+  }, []);
+
+  return { customer };
+};
+
+export const useGetCustomerByID = (user_id) => {
+  const [customer, setCustomer] = useState([]);
+
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/manage/customerByID",
+          { user_id }
+        );
+        setCustomer(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchCustomer();
+  }, [user_id]);
+
+  return { customer };
+};
+
+export const useGetViewInvoice = (user_id) => {
+  const [invoice, setInvoice] = useState([]);
+
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/manage/viewInvoice",
+          { user_id }
+        );
+        setInvoice(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchCustomer();
+  }, [user_id]);
+
+  return { invoice };
+};
+
+export const useGetCustomer = () => {
+  const [customers, setTables] = useState([]);
+
+  const fetchTables = async () => {
+    const response = await axios.get(
+      "http://localhost:5000/api/users/getCustomerManage"
+    );
+    setTables(response.data);
+  };
+
+  useEffect(() => {
+    fetchTables();
+  }, []);
+
+  return { customers };
+};
+
 export const useGetFloorByBranchManage = (branch_id) => {
   const [floors, setFloors] = useState([]);
 
@@ -96,4 +174,103 @@ export const updateEmployeeManage = async (
       employee_id,
     }
   );
+};
+
+export const addEmployee = async (branch_id, shift_id, salary, user_id) => {
+  const response = await axios.post(
+    "http://localhost:5000/api/manage/addEmployee",
+    {
+      branch_id,
+      shift_id,
+      salary,
+      user_id,
+    }
+  );
+};
+
+export const deleteEmployee = async (user_id) => {
+  const response = await axios.post(
+    "http://localhost:5000/api/manage/deleteEmployee",
+    {
+      user_id,
+    }
+  );
+};
+
+export const useSearchCustomer = (query) => {
+  const [customerManage, setCustomer] = useState(null);
+
+  useEffect(() => {
+    if (!query) {
+      setCustomer(null);
+      return;
+    }
+    const fetchEmployee = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/users/searchCustomerManage",
+          { query }
+        );
+        setCustomer(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchEmployee();
+  }, [query]);
+
+  return { customerManage };
+};
+
+export const useSearchCustomerEdit = (query) => {
+  const [customerSearch, setCustomer] = useState(null);
+
+  useEffect(() => {
+    if (!query) {
+      setCustomer(null);
+      return;
+    }
+    const fetchEmployee = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/manage/searchCustomers",
+          { query }
+        );
+        setCustomer(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchEmployee();
+  }, [query]);
+
+  return { customerSearch };
+};
+
+export const useSearchEmployee = (query) => {
+  const [employeeManage, setCustomer] = useState(null);
+
+  useEffect(() => {
+    if (!query) {
+      setCustomer(null);
+      return;
+    }
+    const fetchEmployee = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/users/searchEmployeeManage",
+          { query }
+        );
+        setCustomer(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchEmployee();
+  }, [query]);
+
+  return { employeeManage };
 };

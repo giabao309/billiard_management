@@ -17,36 +17,34 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { DialogDemo } from "@/components/Dialog";
-import { useGetEmployees } from "@/APIs/UserApi";
-import AddEmployee from "@/components/DialogAddEmployee1";
-import { useSearchEmployee } from "@/APIs/Manage";
+import { useGetCustomerManage } from "@/APIs/Manage";
+import { useSearchCustomerEdit } from "@/APIs/Manage";
 
 export default function ManageStaf() {
-  const { employees } = useGetEmployees();
-  const [emplo, setEmplo] = useState(employees);
+  const { customer } = useGetCustomerManage();
+  const [data, setData] = useState(customer);
   const [query, setQuery] = useState("");
-  const { employeeManage } = useSearchEmployee(query);
+  const { customerSearch } = useSearchCustomerEdit(query);
 
   const handleChange = (event) => {
     setQuery(event.target.value);
   };
 
   useEffect(() => {
-    if (employeeManage) {
-      setEmplo(employeeManage);
+    if (customerSearch) {
+      setData(customerSearch);
     }
-  }, [employeeManage]);
+  }, [customerSearch]);
 
   useEffect(() => {
-    setEmplo(employees);
-  }, [employees]);
+    setData(customer);
+  }, [customer]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7;
-  const totalPages = Math.ceil(emplo.length / itemsPerPage);
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(data.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData = emplo.slice(startIndex, startIndex + itemsPerPage);
+  const currentData = data.slice(startIndex, startIndex + itemsPerPage);
 
   const handlePageChange = (page) => {
     if (page > 0 && page <= totalPages) {
@@ -59,7 +57,7 @@ export default function ManageStaf() {
       <div className="w-full">
         <div className="flex justify-between items-center bg-blue-50 p-6 rounded-lg shadow-sm mb-4">
           <div className="flex gap-x-16 justify-center items-center">
-            <h2 className="font-bold text-2xl text-black">Nhân Viên</h2>
+            <h2 className="font-bold text-2xl text-black">Khách hàng</h2>
 
             <div className="relative w-[30rem]">
               <Input
@@ -72,52 +70,30 @@ export default function ManageStaf() {
               <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
             </div>
           </div>
-
-          <div className=" flex space-x-4">
-            <AddEmployee />
-          </div>
         </div>
 
         {/* Table */}
         <Table className="bg-white rounded-lg shadow-sm">
           <TableHeader>
             <TableRow className="bg-blue-100 text-gray-700">
-              {[
-                "ID Người dùng",
-                "ID Nhân viên",
-                "Email",
-                "Tên",
-                "Số điện thoại",
-                "Chi nhánh",
-                "Ca làm việc",
-                "Lương",
-                "",
-              ].map((header, index) => (
-                <TableHead key={index} className="font-semibold py-2 px-4">
-                  {header}
-                </TableHead>
-              ))}
+              {["ID", "Email", "Tên", "Số điện thoại", "Membership"].map(
+                (header, index) => (
+                  <TableHead key={index} className="font-semibold py-2 px-4">
+                    {header}
+                  </TableHead>
+                )
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentData.map((employee) => (
-              <TableRow key={employee.employee_id} className="hover:bg-gray-50">
+            {currentData.map((customer) => (
+              <TableRow key={customer.id} className="hover:bg-gray-50 h-[4rem]">
+                <TableCell className="py-2 px-4">US00{customer.id}</TableCell>
+                <TableCell className="py-2 px-4">{customer.email}</TableCell>
+                <TableCell className="py-2 px-4">{customer.name}</TableCell>
+                <TableCell className="py-2 px-4">{customer.phone}</TableCell>
                 <TableCell className="py-2 px-4">
-                  US00{employee.user_id}
-                </TableCell>
-                <TableCell className="py-2 px-4">
-                  NV00{employee.employee_id}
-                </TableCell>
-                <TableCell className="py-2 px-4">{employee.email}</TableCell>
-                <TableCell className="py-2 px-4">{employee.name}</TableCell>
-                <TableCell className="py-2 px-4">{employee.phone}</TableCell>
-                <TableCell className="py-2 px-4">{employee.branch}</TableCell>
-                <TableCell className="py-2 px-4">{employee.shift}</TableCell>
-                <TableCell className="py-2 px-4">
-                  {employee.salary.toLocaleString()}
-                </TableCell>
-                <TableCell>
-                  <DialogDemo selectedEmployee={employee} />
+                  {customer.membership}
                 </TableCell>
               </TableRow>
             ))}
@@ -127,7 +103,7 @@ export default function ManageStaf() {
         {/* Pagination */}
         <Pagination className="mt-6">
           <PaginationContent>
-            <PaginationItem>
+            <PaginationItem className="cursor-pointer">
               <PaginationPrevious
                 onClick={() => handlePageChange(currentPage - 1)}
               />
@@ -142,7 +118,7 @@ export default function ManageStaf() {
                 </PaginationLink>
               </PaginationItem>
             ))}
-            <PaginationItem>
+            <PaginationItem className="cursor-pointer">
               <PaginationNext
                 onClick={() => handlePageChange(currentPage + 1)}
               />

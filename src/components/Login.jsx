@@ -69,7 +69,6 @@ export default function Login() {
           {/* Hiển thị lỗi nếu có */}
         </div>
         <DialogFooter>
-          <Button variant="ghost">Quên mật khẩu</Button>
           <Register />
           <Button
             className="bg-[#5181F5]"
