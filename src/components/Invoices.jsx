@@ -26,7 +26,7 @@ export default function Invoices() {
     if (selectedTable && selectedTable.id) {
       await openTable(selectedTable.id);
       await createInvoices(branch_id, employeeID, selectedTable.id, datetime);
-      window.location.reload();
+      // window.location.reload();
     }
   };
 

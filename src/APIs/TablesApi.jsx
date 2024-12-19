@@ -72,14 +72,6 @@ export const useGetTableById = (table_id) => {
   return { tableByID };
 };
 
-// export const useGetTableById = async (table_id) => {
-//   const response = await axios.post("http://localhost:5000/api/tables/id", {
-//     table_id,
-//   });
-//   const data = response.data;
-//   return { tableByID: data };
-// };
-
 export const useFetchTable = () => {
   const fetchTables = async (table_id) => {
     const [table, setTable] = useState([]);
@@ -189,6 +181,31 @@ export const useGetTableStatus = () => {
   }, []);
 
   return { status, loading, error };
+};
+
+export const useGetTableType = () => {
+  const [types, setStatus] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchStatus = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/manage/tableTypeManage"
+      );
+      setStatus(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStatus();
+  }, []);
+
+  return { types, loading, error };
 };
 
 export const useUpdateOpenTable = () => {
