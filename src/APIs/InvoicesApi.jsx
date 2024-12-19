@@ -5,7 +5,11 @@ export const useGetInvoiceByTableID = (table_id) => {
   const [invoices, setInvoice] = useState(null);
 
   useEffect(() => {
-    const fetchInvoice = async () => {
+    if (!table_id) {
+      setInvoice(null);
+      return;
+    }
+    const fetchInvoice1 = async () => {
       try {
         const response = await axios.post(
           "http://localhost:5000/api/invoices/id",
@@ -17,7 +21,7 @@ export const useGetInvoiceByTableID = (table_id) => {
       }
     };
 
-    fetchInvoice();
+    fetchInvoice1();
   }, [table_id]);
 
   return { invoices };
@@ -27,7 +31,7 @@ export const useGetInvoiceDetailByID = (invoices_id) => {
   const [invoiceDetail, setInvoiceDetail] = useState(null);
 
   useEffect(() => {
-    const fetchInvoice = async () => {
+    const fetchInvoice2 = async () => {
       try {
         const response = await axios.post(
           "http://localhost:5000/api/invoices/getInvoiceDetail",
@@ -39,7 +43,7 @@ export const useGetInvoiceDetailByID = (invoices_id) => {
       }
     };
 
-    fetchInvoice();
+    fetchInvoice2();
   }, [invoices_id]);
 
   return { invoiceDetail };

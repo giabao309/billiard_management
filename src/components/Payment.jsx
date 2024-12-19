@@ -120,9 +120,11 @@ export function Payment() {
       setSearchResults(customer);
     }
   }, [customer, selectedCustomerId]);
+
   const handleChange = (event) => {
     setQuery(event.target.value);
   };
+
   const handleSelectCustomer = (customerName, customerID) => {
     setQuery(customerName); // Cập nhật giá trị input với tên khách hàng đã chọn
     setSelectedCustomerId(customerID);

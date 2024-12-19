@@ -46,6 +46,60 @@ export const useGetTableByBranch = (branch_id) => {
   return { tables };
 };
 
+export const useGetTableById = (table_id) => {
+  const [tableByID, setTables] = useState([]);
+
+  useEffect(() => {
+    if (!table_id) {
+      setTables(null);
+      return;
+    }
+    const fetchTables = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/tables/id",
+          { table_id }
+        );
+        setTables(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchTables();
+  }, [table_id]);
+
+  return { tableByID };
+};
+
+// export const useGetTableById = async (table_id) => {
+//   const response = await axios.post("http://localhost:5000/api/tables/id", {
+//     table_id,
+//   });
+//   const data = response.data;
+//   return { tableByID: data };
+// };
+
+export const useFetchTable = () => {
+  const fetchTables = async (table_id) => {
+    const [table, setTable] = useState([]);
+    if (!table_id) {
+      return;
+    }
+    try {
+      const response = await axios.post("http://localhost:5000/api/tables/id", {
+        table_id: table_id,
+      });
+      setTable(response.data);
+      return table;
+    } catch (err) {
+      console.error("Có lỗi xảy ra:", err.message || err);
+    }
+  };
+
+  return { fetchTables };
+};
+
 export const useGetTableAvailable = (branch_id) => {
   const [tableAvailable, setTableAvailable] = useState([]);
 

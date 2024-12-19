@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Payment } from "@/components/Payment";
 import { TransferTable } from "@/components/TransferTable";
@@ -8,8 +8,8 @@ import InvoiceDetailCard from "@/components/InvoiceDetailCard";
 export default function Invoices() {
   const {
     selectedTable,
+    setSelectedTable,
     openTable,
-    invoices,
     branchName,
     date,
     time,
@@ -19,19 +19,17 @@ export default function Invoices() {
     datetime,
     totalAmount,
     createInvoices,
+    invoice,
   } = useContext(TableContext);
 
   const handleOpenTable = async () => {
     if (selectedTable && selectedTable.id) {
-      try {
-        await openTable(selectedTable.id);
-        await createInvoices(branch_id, employeeID, selectedTable.id, datetime);
-        window.location.reload();
-      } catch (error) {
-        console.error("Error opening table:", error);
-      }
+      await openTable(selectedTable.id);
+      await createInvoices(branch_id, employeeID, selectedTable.id, datetime);
+      window.location.reload();
     }
   };
+
   return (
     <div>
       {selectedTable ? (
@@ -54,11 +52,11 @@ export default function Invoices() {
             </span>
           </div>
 
-          {selectedTable.status_id === 2 && invoices ? (
+          {selectedTable.status_id === 2 && invoice ? (
             <div className="h-full">
               <div className="flex justify-start items-center h-12 gap-x-2">
                 <span className="flex items-center justify-between px-2 h-10 rounded-md bg-gray-200 ">
-                  Hoá đơn: HD00{invoices.id}
+                  Hoá đơn: HD00{invoice.id}
                 </span>
                 <span className="flex items-center px-2 h-10 rounded-md bg-gray-200 ">
                   Giờ bắt đầu: {formattedTime}
@@ -69,7 +67,7 @@ export default function Invoices() {
               </div>
 
               <div>
-                {invoices ? <div></div> : "ko co hoa don"}
+                {invoice ? <div></div> : "ko co hoa don"}
                 <InvoiceDetailCard />
               </div>
 
@@ -138,7 +136,7 @@ export default function Invoices() {
 
               <Button
                 className="w-[12rem] h-[4rem] bg-[#5181F5] text-xl"
-                onClick={handleOpenTable}
+                onClick={() => handleOpenTable()}
               >
                 Mở bàn
               </Button>

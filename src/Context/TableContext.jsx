@@ -10,11 +10,14 @@ import {
   useUpdateCloseTable,
   useGetTableAvailable,
   useUpdateTransferTable,
+  useGetTableById,
 } from "@/APIs/TablesApi";
 import {
   useGetMenuTypes,
   useGetMenuItems,
-  useGetMenuCategories,
+  useGetServiceByType,
+  useAddOrUpdateItemInvoice,
+  useDeleteOrUpdateItemInvoice,
 } from "@/APIs/ServiceApi";
 
 import {
@@ -38,15 +41,23 @@ export const TableProvider = ({ children }) => {
   const employeeName = localStorage.getItem("employeeName");
 
   //SERVICES
-  const { categories } = useGetMenuCategories();
-  const [cate, setCate] = useState("all");
-
   const { types } = useGetMenuTypes();
   const [type, setType] = useState("all");
+  const { serviceByType } = useGetServiceByType(type);
 
   const { items } = useGetMenuItems();
+  const [getItem, setGetItem] = useState(items);
 
-  const [services, setServices] = useState(items);
+  useEffect(() => {
+    if (type === "all") {
+      setGetItem(items);
+    } else {
+      setGetItem(serviceByType);
+    }
+  }, [type, items, serviceByType]);
+
+  const { addOrUpdateItem } = useAddOrUpdateItemInvoice();
+  const { deleteOrUpdateItem } = useDeleteOrUpdateItemInvoice();
 
   // TABLE
   const { floors } = useGetFloorByBranch(branch_id);
@@ -58,10 +69,12 @@ export const TableProvider = ({ children }) => {
   const { tableByStatus } = useGetTableByBranchAndStatus(branch_id, statu);
 
   const { tables } = useGetTableByBranch(branch_id);
+  const [getTable, setGetTable] = useState([]);
+
   const { tableAvailable } = useGetTableAvailable(branch_id);
   const { transferTable } = useUpdateTransferTable();
-
-  const [getTable, setGetTable] = useState(tables);
+  const [selectedTable, setSelectedTable] = useState(null);
+  // const { tableByID } = useGetTableById(selectedTable?.id);
 
   useEffect(() => {
     if (statu === "all") {
@@ -79,17 +92,28 @@ export const TableProvider = ({ children }) => {
     }
   }, [floor, tables, tableByFloor]);
 
-  const [selectedTable, setSelectedTable] = useState(null);
-
   //INVOICES
   const { openTable } = useUpdateOpenTable();
   const { closeTable } = useUpdateCloseTable();
+
   const { invoices } = useGetInvoiceByTableID(selectedTable?.id);
+  const [invoice, setInvoice] = useState(invoices);
+
   const { invoiceDetail } = useGetInvoiceDetailByID(invoices?.id);
+  const [getInvoiceDetail, setGetInvoiceDetail] = useState(null);
+
   const [totalAmount, setTotalAmount] = useState(0);
   const [playTime, setPlayTime] = useState(0);
   const [currentDate, setCurrentDate] = useState(new Date());
   const { promotion } = useGetPromotion();
+
+  useEffect(() => {
+    setGetInvoiceDetail(invoiceDetail);
+  }, [invoiceDetail]);
+
+  useEffect(() => {
+    setInvoice(invoices);
+  }, [invoices]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -162,7 +186,6 @@ export const TableProvider = ({ children }) => {
         branch_id,
         floors,
         tables,
-        categories,
         types,
         items,
         selectedTable,
@@ -170,6 +193,7 @@ export const TableProvider = ({ children }) => {
         openTable,
         closeTable,
         invoices,
+        invoice,
         invoiceDetail,
         setPlayTime,
         playTime,
@@ -190,6 +214,12 @@ export const TableProvider = ({ children }) => {
         updateInvoicePayment,
         tableAvailable,
         transferTable,
+        setType,
+        getItem,
+        setGetItem,
+        addOrUpdateItem,
+        deleteOrUpdateItem,
+        getInvoiceDetail,
       }}
     >
       {children}

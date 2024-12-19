@@ -3,9 +3,10 @@ import TableImage from "@/assets/table.png";
 import { useState, useContext } from "react";
 import { TableContext } from "@/Context/TableContext";
 import { Check } from "lucide-react";
-
+import { useEffect } from "react";
 export default function TableCards() {
-  const { setSelectedTable, getTable } = useContext(TableContext);
+  const { setSelectedTable, selectedTable, getTable } =
+    useContext(TableContext);
   const [selectedTableId, setSelectedTableId] = useState(null);
 
   const handleCardClick = (table) => {

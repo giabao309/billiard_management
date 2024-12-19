@@ -1,40 +1,36 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState, useEffect, useContext } from "react";
+import { Input } from "@/components/ui/input";
 import MenuItems from "@/components/MenuItems";
 import MenuTypes from "@/components/MenuTypes";
+import { useSearchService } from "@/APIs/ServiceApi";
 import { TableContext } from "@/Context/TableContext";
-import { useState, useContext } from "react";
 
-export default function MenuServices({ items }) {
-  const { categories } = useContext(TableContext);
+export default function MenuServices() {
+  const { setGetItem } = useContext(TableContext);
+  const [query, setQuery] = useState("");
+  const { service } = useSearchService(query);
+  const handleChange = (event) => {
+    setQuery(event.target.value);
+  };
+  useEffect(() => {
+    if (service) {
+      setGetItem(service);
+    }
+  }, [service]);
   return (
-    <Tabs defaultValue="all" className="flex flex-col">
-      <TabsList className="flex justify-around w-3/4 bg-[#5181F5] text-black mb-2">
-        <TabsTrigger key="all" className="w-full" value="all">
-          Tất cả
-        </TabsTrigger>
-        {categories.map((categories) => (
-          <TabsTrigger
-            key={categories.name}
-            className="w-full"
-            value={categories.name}
-          >
-            {categories.name}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-
-      <TabsContent key="all" value="all" className="flex flex-row gap-x-4 mt-0">
+    <div className="flex flex-col gap-y-2">
+      <div>
+        <Input
+          type="text"
+          placeholder="Tìm kiếm"
+          value={query}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="flex flex-row gap-x-4 mt-0">
         <MenuTypes />
-        <MenuItems categories={"all"} />
-      </TabsContent>
-
-      {/* {categories
-        .filter((category) => category.id !== "all")
-        .map((category) => (
-          <TabsContent key={category.id} value={category.id} className="mt-0">
-            <MenuItems items={items} categories={category.id} />
-          </TabsContent>
-        ))} */}
-    </Tabs>
+        <MenuItems />
+      </div>
+    </div>
   );
 }

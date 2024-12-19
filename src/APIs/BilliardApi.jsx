@@ -26,29 +26,43 @@ export const useGetAddress = () => {
   return { address, loading, error };
 };
 
+export const useGetBranchByID = (branch_id) => {
+  const [branch, setBranch] = useState([]);
+
+  if (!branch_id) {
+    return;
+  }
+
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      const response = await axios.post(
+        "http://localhost:5000/api/branches/id",
+        { branch_id }
+      );
+      setBranch(response.data);
+    };
+
+    fetchEmployee();
+  }, [branch_id]);
+
+  return { branch };
+};
+
 export const useGetDistrict = () => {
   const [district, setDistrict] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const fetchAddress = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/branches/district"
-      );
-      setDistrict(response.data);
-      setLoading(false);
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
-    }
+    const response = await axios.get(
+      "http://localhost:5000/api/branches/district"
+    );
+    setDistrict(response.data);
   };
 
   useEffect(() => {
     fetchAddress();
   }, []);
 
-  return { district, loading, error };
+  return { district };
 };
 
 export const useGetFloorByBranch = (branch_id) => {

@@ -44,7 +44,7 @@ export default function Header() {
   return (
     <header className="flex items-center justify-between px-8 py-4 bg-[#5181F5] text-white">
       <div className="flex items-center gap-x-16">
-        <a href="#home" className="flex items-center cursor-pointer">
+        <a href="/admin" className="flex items-center cursor-pointer">
           <img src={Logo} alt="Logo" className="h-10 mr-3" />
           <span className="font-bold text-lg">Billiard Center</span>
         </a>

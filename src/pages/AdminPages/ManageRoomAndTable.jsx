@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import {
   Table,
   TableBody,
@@ -13,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -41,16 +39,51 @@ export default function ManageRoomAndTable() {
 
   // Dữ liệu giả lập
   const data = [
-    { id: 1, tenPhongBan: "Phòng VIP 1", khuVuc: "Khu A", trangThai: "Đang sử dụng" },
+    {
+      id: 1,
+      tenPhongBan: "Phòng VIP 1",
+      khuVuc: "Khu A",
+      trangThai: "Đang sử dụng",
+    },
     { id: 2, tenPhongBan: "Phòng 2", khuVuc: "Khu A", trangThai: "Sẵn sàng" },
-    { id: 3, tenPhongBan: "Phòng 3", khuVuc: "Khu B", trangThai: "Đang bảo trì" },
-    { id: 4, tenPhongBan: "Phòng VIP 2", khuVuc: "Khu B", trangThai: "Sẵn sàng" },
-    { id: 5, tenPhongBan: "Phòng 4", khuVuc: "Khu C", trangThai: "Đang sử dụng" },
-    { id: 6, tenPhongBan: "Phòng 5", khuVuc: "Khu C", trangThai: "Đang bảo trì" },
+    {
+      id: 3,
+      tenPhongBan: "Phòng 3",
+      khuVuc: "Khu B",
+      trangThai: "Đang bảo trì",
+    },
+    {
+      id: 4,
+      tenPhongBan: "Phòng VIP 2",
+      khuVuc: "Khu B",
+      trangThai: "Sẵn sàng",
+    },
+    {
+      id: 5,
+      tenPhongBan: "Phòng 4",
+      khuVuc: "Khu C",
+      trangThai: "Đang sử dụng",
+    },
+    {
+      id: 6,
+      tenPhongBan: "Phòng 5",
+      khuVuc: "Khu C",
+      trangThai: "Đang bảo trì",
+    },
     { id: 7, tenPhongBan: "Phòng 6", khuVuc: "Khu A", trangThai: "Sẵn sàng" },
-    { id: 8, tenPhongBan: "Phòng VIP 3", khuVuc: "Khu B", trangThai: "Đang sử dụng" },
+    {
+      id: 8,
+      tenPhongBan: "Phòng VIP 3",
+      khuVuc: "Khu B",
+      trangThai: "Đang sử dụng",
+    },
     { id: 9, tenPhongBan: "Phòng 7", khuVuc: "Khu C", trangThai: "Sẵn sàng" },
-    { id: 10, tenPhongBan: "Phòng 8", khuVuc: "Khu A", trangThai: "Đang bảo trì" },
+    {
+      id: 10,
+      tenPhongBan: "Phòng 8",
+      khuVuc: "Khu A",
+      trangThai: "Đang bảo trì",
+    },
   ];
 
   // Tính toán dữ liệu cho pagination
@@ -168,10 +201,8 @@ export default function ManageRoomAndTable() {
         </Pagination>
       </div>
 
-
       {showAddForm && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-
           <AddRoomTableForm />
           <div className="flex justify-end mt-4">
             <Button
@@ -182,7 +213,6 @@ export default function ManageRoomAndTable() {
             </Button>
           </div>
         </div>
-
       )}
     </div>
   );

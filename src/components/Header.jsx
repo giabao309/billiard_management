@@ -11,10 +11,18 @@ import {
 import Login from "@/components/Login";
 
 export default function Header() {
+  const handleScroll = (sectionId) => {
+    document.getElementById(sectionId).scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToBottom = () => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  };
+
   return (
     <header className="flex items-center justify-between px-8 py-4 bg-[#5181F5] text-white">
       <div className="flex items-center gap-16">
-        <a href="#home" className="flex items-center cursor-pointer">
+        <a href="/" className="flex items-center cursor-pointer">
           <img src={Logo} alt="Logo" className="h-10 mr-3" />
           <span className="font-bold text-lg">Billiard Center</span>
         </a>
@@ -22,12 +30,31 @@ export default function Header() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem className="flex gap-x-4">
-              <NavigationMenuLink href="#booking">Đặt bàn</NavigationMenuLink>
-              <NavigationMenuLink href="#branches">
+              <NavigationMenuLink href="/booking">Đặt bàn</NavigationMenuLink>
+              <NavigationMenuLink
+                className="cursor-pointer"
+                onClick={scrollToBottom}
+              >
                 Hệ thống chi nhánh
               </NavigationMenuLink>
-              <NavigationMenuLink href="">Tuyển dụng</NavigationMenuLink>
-              <NavigationMenuLink href="">Tin tức</NavigationMenuLink>
+              <NavigationMenuLink
+                className="cursor-pointer"
+                onClick={() => handleScroll("section")}
+              >
+                Bảng Giá
+              </NavigationMenuLink>
+              <NavigationMenuLink
+                className="cursor-pointer"
+                onClick={() => handleScroll("section1")}
+              >
+                Chất lượng
+              </NavigationMenuLink>
+              <NavigationMenuLink
+                className="cursor-pointer"
+                onClick={scrollToBottom}
+              >
+                Thông tin về chúng tôi
+              </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

@@ -75,3 +75,109 @@ export const useGetMenuCategories = () => {
 
   return { categories, loading, error };
 };
+
+export const useGetServiceByType = (type_id) => {
+  const [serviceByType, setServiceByType] = useState([]);
+
+  useEffect(() => {
+    const fetchService = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/services/itemsByType",
+          { type_id }
+        );
+        setServiceByType(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchService();
+  }, [type_id]);
+
+  return { serviceByType };
+};
+
+export const useGetServiceByCate = (category_id) => {
+  const [serviceByCate, setServiceByCate] = useState([]);
+
+  useEffect(() => {
+    const fetchService = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/services/itemsByCate",
+          { category_id }
+        );
+        setServiceByCate(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchService();
+  }, [category_id]);
+
+  return { serviceByCate };
+};
+
+export const useSearchService = (query) => {
+  const [service, setService] = useState(null);
+
+  useEffect(() => {
+    if (!query) {
+      setService(null);
+      return;
+    }
+    const fetchService = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/services/searchService",
+          { query }
+        );
+        setService(response.data);
+      } catch (err) {
+        console.error("Có lỗi xảy ra:", err.message || err);
+      }
+    };
+
+    fetchService();
+  }, [query]);
+
+  return { service };
+};
+
+export const useAddOrUpdateItemInvoice = () => {
+  const [message, setMessage] = useState("");
+
+  const addOrUpdateItem = async (invoice_id, service_id) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/invoices/addOrUpdateItem",
+        { invoice_id: invoice_id, service_id: service_id }
+      );
+      setMessage("Thành công");
+    } catch (err) {
+      setMessage("Thất bại");
+    }
+  };
+
+  return { message, addOrUpdateItem };
+};
+
+export const useDeleteOrUpdateItemInvoice = () => {
+  const [message, setMessage] = useState("");
+
+  const deleteOrUpdateItem = async (invoice_id, service_id) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/invoices/deleteOrUpdateItem",
+        { invoice_id: invoice_id, service_id: service_id }
+      );
+      setMessage("Thành công");
+    } catch (err) {
+      setMessage("Thất bại");
+    }
+  };
+
+  return { message, deleteOrUpdateItem };
+};

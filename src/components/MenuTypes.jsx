@@ -1,31 +1,25 @@
 import React from "react";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import { useContext } from "react";
 import { TableContext } from "@/Context/TableContext";
 
 export default function TableStatus() {
-  const { types } = useContext(TableContext);
+  const { types, setType } = useContext(TableContext);
   return (
     <div className="flex flex-col gap-y-4">
-      <div className="flex items-center space-x-2">
-        <Checkbox id="all" />
-        <label
-          htmlFor="all"
-          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          Tất cả
-        </label>
-      </div>
+      <Button variant="ghost" className="border" onClick={() => setType("all")}>
+        Tất cả
+      </Button>
+
       {types.map((type) => (
-        <div className="flex items-center space-x-2">
-          <Checkbox id={type.name} />
-          <label
-            htmlFor={type.name}
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            {type.name}
-          </label>
-        </div>
+        <Button
+          key={type.id}
+          variant="ghost"
+          className="border"
+          onClick={() => setType(type.id)}
+        >
+          {type.name}
+        </Button>
       ))}
     </div>
   );
