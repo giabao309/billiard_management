@@ -1,12 +1,17 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { AiOutlineHome, AiOutlineTable } from "react-icons/ai";
 import { FaWarehouse } from "react-icons/fa";
 import Storage from "./Storage";
 import ManageRoomAndTable from "./ManageRoomAndTable";
-import AddFormTableRoom from "@/components/ui/add-form-tableRoom";
 
 export default function ManageEachBranch() {
-  const [activeSection, setActiveSection] = useState("storage");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const branchId = queryParams.get("branchId");
+  const branchName = queryParams.get("branchName");
+
+  const [activeSection, setActiveSection] = useState("default");
 
   const sidebarItems = [
     {
@@ -28,14 +33,10 @@ export default function ManageEachBranch() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Sidebar */}
       <aside className="w-64 bg-gray-800 text-white flex flex-col">
-        {/* Header */}
         <div className="p-6 text-center text-lg font-bold border-b border-gray-700">
-          Quản Lý Chi Nhánh
+          {branchName || "Quản Lý Chi Nhánh"}
         </div>
-
-        {/* Navigation */}
         <nav className="flex-grow p-4">
           <ul className="space-y-4">
             {sidebarItems.map((item) => (
@@ -55,19 +56,14 @@ export default function ManageEachBranch() {
             ))}
           </ul>
         </nav>
-
-        {/* Footer */}
         <div className="p-4 border-t border-gray-700 text-center text-sm">
           © 2024 Billiards Management
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-grow p-8">
-        {/* Render Content Based on Active Section */}
-        {activeSection === "storage" && <Storage />}
+        {activeSection === "storage" && <Storage branchId={branchId} />}
         {activeSection === "tables" && <ManageRoomAndTable />}
-        {/* {activeSection === "floors" && }  */}
       </main>
     </div>
   );
