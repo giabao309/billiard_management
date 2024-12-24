@@ -1,11 +1,28 @@
+import React, { useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TableStatus from "@/components/TableStatus";
 import TableCards from "@/components/TableCards";
 import { useContext } from "react";
 import { TableContext } from "@/Context/TableContext";
 
+import { useSelector, useDispatch } from "react-redux";
+import { fetchFloors } from "@/Redux/tables/tablesSlice";
+
 export default function TableTabs() {
-  const { floors, setFloor } = useContext(TableContext);
+  const { setFloor, branch_id } = useContext(TableContext);
+
+  const dispatch = useDispatch();
+  const floors = useSelector((state) => state.tables.floors);
+
+  useEffect(() => {
+    dispatch(fetchFloors(branch_id));
+
+    const interval = setInterval(() => {
+      dispatch(fetchFloors(branch_id));
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [dispatch]);
 
   return (
     <Tabs defaultValue="all" className="flex flex-col">

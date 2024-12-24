@@ -1,13 +1,17 @@
 import { Button } from "@/components/ui/button";
 import TableImage from "@/assets/table.png";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { TableContext } from "@/Context/TableContext";
 import { Check } from "lucide-react";
-import { useEffect } from "react";
+
 export default function TableCards() {
-  const { setSelectedTable, selectedTable, getTable } =
-    useContext(TableContext);
-  const [selectedTableId, setSelectedTableId] = useState(null);
+  const {
+    setSelectedTable,
+    branch_id,
+    tableFlex,
+    selectedTableId,
+    setSelectedTableId,
+  } = useContext(TableContext);
 
   const handleCardClick = (table) => {
     setSelectedTable(table);
@@ -16,8 +20,8 @@ export default function TableCards() {
 
   return (
     <div className="flex gap-6 max-w-[85%] max-h-[65vh] flex-wrap overflow-auto">
-      {getTable && getTable.length > 0 ? (
-        getTable.map((table) => {
+      {tableFlex && tableFlex.length > 0 ? (
+        tableFlex.map((table) => {
           let statusDot;
           if (table.status_id === 2) {
             statusDot = "#66CC66";

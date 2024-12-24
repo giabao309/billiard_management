@@ -28,6 +28,9 @@ import {
   updateInvoicePayment,
 } from "@/APIs/InvoicesApi";
 
+import { useSelector, useDispatch } from "react-redux";
+import { fetchTablesByBranch, fetchInvoices } from "@/Redux/tables/tablesSlice";
+
 export const TableContext = createContext({});
 
 export const TableProvider = ({ children }) => {
@@ -60,6 +63,21 @@ export const TableProvider = ({ children }) => {
   const { deleteOrUpdateItem } = useDeleteOrUpdateItemInvoice();
 
   // TABLE
+  const [selectedTableId, setSelectedTableId] = useState(null);
+
+  const dispatch = useDispatch();
+  const tableFlex = useSelector((state) => state.tables.tablesByBranch);
+
+  useEffect(() => {
+    dispatch(fetchTablesByBranch(branch_id));
+
+    const interval = setInterval(() => {
+      dispatch(fetchTablesByBranch(branch_id));
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [dispatch]);
+
   const { floors } = useGetFloorByBranch(branch_id);
   const [floor, setFloor] = useState("all");
   const { tableByFloor } = useGetTableByBranchAndFloor(branch_id, floor);
@@ -74,7 +92,13 @@ export const TableProvider = ({ children }) => {
   const { tableAvailable } = useGetTableAvailable(branch_id);
   const { transferTable } = useUpdateTransferTable();
   const [selectedTable, setSelectedTable] = useState(null);
-  // const { tableByID } = useGetTableById(selectedTable?.id);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setGetTable(tables);
+    }, 100);
+    return () => clearInterval(interval);
+  }, [tables]);
 
   useEffect(() => {
     if (statu === "all") {
@@ -179,6 +203,9 @@ export const TableProvider = ({ children }) => {
   return (
     <TableContext.Provider
       value={{
+        selectedTableId,
+        setSelectedTableId,
+        tableFlex,
         toast,
         employeeID,
         employeeName,

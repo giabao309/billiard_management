@@ -6,19 +6,23 @@ import { Toaster } from "@/components/ui/toaster";
 import EmployeeRoute from "@/routes/EmployeeRoute";
 import ClientRoute from "@/routes/ClientRoute";
 import AdminRoute from "@/routes/AdminRoute";
+import { Provider } from "react-redux";
+import store from "@/Redux/store";
 
 function App() {
   return (
-    <StrictMode>
-      <Router>
-        <Routes>
-          <Route path="/*" element={<ClientRoute />} />
-          <Route path="/admin/*" element={<AdminRoute />} />
-          <Route path="/employee/*" element={<EmployeeRoute />} />
-        </Routes>
-        <Toaster />
-      </Router>
-    </StrictMode>
+    <Provider store={store}>
+      <StrictMode>
+        <Router>
+          <Routes>
+            <Route path="/*" element={<ClientRoute />} />
+            <Route path="/admin/*" element={<AdminRoute />} />
+            <Route path="/employee/*" element={<EmployeeRoute />} />
+          </Routes>
+          <Toaster />
+        </Router>
+      </StrictMode>
+    </Provider>
   );
 }
 

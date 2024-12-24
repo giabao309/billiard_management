@@ -4,6 +4,9 @@ import { Payment } from "@/components/Payment";
 import { TransferTable } from "@/components/TransferTable";
 import { TableContext } from "@/Context/TableContext";
 import InvoiceDetailCard from "@/components/InvoiceDetailCard";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchTablesByBranch, fetchInvoices } from "@/Redux/tables/tablesSlice";
 
 export default function Invoices() {
   const {
@@ -20,13 +23,42 @@ export default function Invoices() {
     totalAmount,
     createInvoices,
     invoice,
+    invoicea,
+    selectedTableId,
   } = useContext(TableContext);
+
+  const dispatch = useDispatch();
+  const invoiceb = useSelector((state) => state.tables.invoices);
+
+  useEffect(() => {
+    dispatch(fetchInvoices(selectedTableId));
+
+    const interval = setInterval(() => {
+      dispatch(fetchInvoices(selectedTableId));
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [dispatch, selectedTableId]);
+
+  const fetchUpdatedTable = async (table_id) => {
+    try {
+      const response = await axios.post("http://localhost:5000/api/tables/id", {
+        table_id,
+      });
+      const updatedTable = await response.data;
+
+      console.log(updatedTable);
+      setSelectedTable(updatedTable);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật thông tin bàn:", error);
+    }
+  };
 
   const handleOpenTable = async () => {
     if (selectedTable && selectedTable.id) {
       await openTable(selectedTable.id);
       await createInvoices(branch_id, employeeID, selectedTable.id, datetime);
-      // window.location.reload();
+      await fetchUpdatedTable(selectedTable.id);
     }
   };
 
@@ -52,7 +84,7 @@ export default function Invoices() {
             </span>
           </div>
 
-          {selectedTable.status_id === 2 && invoice ? (
+          {invoice && invoice.status === 2 ? (
             <div className="h-full">
               <div className="flex justify-start items-center h-12 gap-x-2">
                 <span className="flex items-center justify-between px-2 h-10 rounded-md bg-gray-200 ">
@@ -67,7 +99,6 @@ export default function Invoices() {
               </div>
 
               <div>
-                {invoice ? <div></div> : "ko co hoa don"}
                 <InvoiceDetailCard />
               </div>
 
@@ -82,48 +113,10 @@ export default function Invoices() {
                     <TransferTable />
                   </div>
                   <div className="flex items-center justify-center w-[30%]">
-                    <Payment />
+                    <Payment invoivoi={invoiceb} />
                   </div>
                 </div>
               </div>
-            </div>
-          ) : selectedTable.status_id === 3 ? (
-            <div className="flex flex-col gap-y-4 items-center justify-center mt-12">
-              <div className="mb-8">
-                <span>Trạng thái: </span>{" "}
-                <span className="font-bold text-xl p-4 rounded-lg">
-                  {selectedTable.status}
-                </span>
-              </div>
-
-              <Button
-                className="w-[12rem] h-[4rem] bg-[#5181F5] text-xl"
-                onClick={handleOpenTable}
-              >
-                Mở bàn
-              </Button>
-              <Button
-                className="w-[12rem] h-[4rem] bg-gray-500 text-xl"
-                // onClick={handleOpenTable}
-              >
-                Huỷ đặt bàn
-              </Button>
-            </div>
-          ) : selectedTable.status_id === 4 ? (
-            <div className="flex flex-col gap-y-4 items-center justify-center mt-12">
-              <div className="mb-8">
-                <span>Trạng thái: </span>{" "}
-                <span className="font-bold text-xl p-4 rounded-lg">
-                  {selectedTable.status}
-                </span>
-              </div>
-
-              <Button
-                className="w-[12rem] h-[4rem] bg-[#5181F5] text-xl"
-                disabled={true}
-              >
-                Mở bàn
-              </Button>
             </div>
           ) : (
             <div className="flex flex-col gap-y-4 items-center justify-center mt-12">

@@ -2,6 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TableContext } from "@/Context/TableContext";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchTablesByBranch,
+  fetchFloors,
+  fetchInvoiceDetail,
+} from "@/Redux/tables/tablesSlice";
 
 export default function InvoiceDetailCard() {
   const {
@@ -9,33 +15,33 @@ export default function InvoiceDetailCard() {
     difference,
     setTotalAmount,
     setPlayTime,
-    getInvoiceDetail,
     invoice,
     deleteOrUpdateItem,
     toast,
   } = useContext(TableContext);
 
-  const handleDeleteItem = (invoi) => {
-    if (!invoice || invoice.length === 0 || invoice.status === 1) {
-      toast({
-        title: "Thông báo",
-        description: "Vui lòng chọn bàn trước khi thêm sản phẩm.",
-        status: "warning",
-      });
-      return;
-    } else if (selectedTable.status_id !== 2) {
-      toast({
-        title: "Thông báo",
-        description: "Vui lòng mở bàn trước khi thêm sản phẩm.",
-        status: "warning",
-      });
-      return;
-    }
+  const dispatch = useDispatch();
 
-    deleteOrUpdateItem(invoice.id, invoi.service_id);
+  // Lấy dữ liệu từ Redux store
+  const invoiceDetail = useSelector((state) => state.tables.invoiceDetail);
+
+  useEffect(() => {
+    // Fetch dữ liệu ngay khi component được mount
+    dispatch(fetchInvoiceDetail(invoice.id));
+
+    // Tự động cập nhật dữ liệu mỗi 5 giây
+    const interval = setInterval(() => {
+      dispatch(fetchInvoiceDetail(invoice.id));
+    }, 100);
+
+    return () => clearInterval(interval); // Dọn dẹp interval khi unmount
+  }, [dispatch, invoice]);
+
+  const handleDeleteItem = (item) => {
+    deleteOrUpdateItem(invoice.id, item.service_id);
     toast({
       title: "Thông báo",
-      description: `Xoa thành công ${invoi.service_id}, HD00${invoice.id}`,
+      description: `Xoá thành công ${item.name}, HD00${invoice.id}`,
       status: "success",
     });
   };
@@ -52,7 +58,7 @@ export default function InvoiceDetailCard() {
 
   // Hàm tính thành tiền các món chi tiết
   const calculateInvoiceDetailsTotal = () => {
-    return getInvoiceDetail?.reduce((total, invoice) => {
+    return invoiceDetail?.reduce((total, invoice) => {
       return total + totalInvoiceDetail(invoice.quantity, invoice.price);
     }, 0);
   };
@@ -69,7 +75,7 @@ export default function InvoiceDetailCard() {
 
     // Cập nhật tổng tiền
     setTotalAmount(totalPlay + totalInvoiceDetails);
-  }, [difference, selectedTable.price, getInvoiceDetail]);
+  }, [difference, selectedTable.price, invoiceDetail]);
 
   //Hàm thêm món
 
@@ -106,9 +112,9 @@ export default function InvoiceDetailCard() {
           </div>
         </CardContent>
       </Card>
-      {getInvoiceDetail ? (
+      {invoiceDetail ? (
         <div>
-          {getInvoiceDetail.map((invoi) => (
+          {invoiceDetail.map((item) => (
             <Card className=" rounded-lg mt-2 shadow-lg">
               <CardContent>
                 <div>
@@ -117,18 +123,18 @@ export default function InvoiceDetailCard() {
                       <span className="italic text-gray-500 mb-2">
                         Tên sản phẩm
                       </span>
-                      <span className="font-bold">{invoi.name}</span>
+                      <span className="font-bold">{item.name}</span>
                     </div>
                     <div className="flex flex-col items-center">
                       <span className="italic text-gray-500 mb-2">
                         Số lượng
                       </span>
-                      <span className="font-bold">{invoi.quantity}</span>
+                      <span className="font-bold">{item.quantity}</span>
                     </div>
                     <div className="flex flex-col items-center">
                       <span className="italic text-gray-500 mb-2">Đơn giá</span>
                       <span className="font-bold">
-                        {invoi.price.toLocaleString()}
+                        {item.price.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex flex-col items-center">
@@ -137,13 +143,13 @@ export default function InvoiceDetailCard() {
                       </span>
                       <span className="font-bold">
                         {totalInvoiceDetail(
-                          invoi.quantity,
-                          invoi.price
+                          item.quantity,
+                          item.price
                         ).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex flex-col items-center justify-center">
-                      <Button onClick={() => handleDeleteItem(invoi)}>
+                      <Button onClick={() => handleDeleteItem(item)}>
                         Xoá
                       </Button>
                     </div>

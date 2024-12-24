@@ -25,11 +25,13 @@ import { TableContext } from "@/Context/TableContext";
 import { useSearchCustomer } from "@/APIs/UserApi";
 import PrintableInvoice from "./PrintInvoices";
 import CSS from "@/components/PrintInvoiceCSS";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchInvoiceDetail } from "@/Redux/tables/tablesSlice";
 
 export function Payment() {
   const {
     selectedTable,
-    invoiceDetail,
+    invoice,
     branchName,
     employeeName,
     totalAmount,
@@ -48,6 +50,23 @@ export function Payment() {
     { name: "Đơn giá" },
     { name: "Thành tiền" },
   ];
+
+  const dispatch = useDispatch();
+
+  // Lấy dữ liệu từ Redux store
+  const invoiceDetail = useSelector((state) => state.tables.invoiceDetail);
+
+  useEffect(() => {
+    // Fetch dữ liệu ngay khi component được mount
+    dispatch(fetchInvoiceDetail(invoice.id));
+
+    // Tự động cập nhật dữ liệu mỗi 5 giây
+    const interval = setInterval(() => {
+      dispatch(fetchInvoiceDetail(invoice.id));
+    }, 100);
+
+    return () => clearInterval(interval); // Dọn dẹp interval khi unmount
+  }, [dispatch, invoice]);
 
   //IN HOÁ ĐƠN
   const printRef = useRef();
