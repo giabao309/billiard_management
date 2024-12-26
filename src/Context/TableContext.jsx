@@ -70,7 +70,6 @@ export const TableProvider = ({ children }) => {
 
   useEffect(() => {
     dispatch(fetchTablesByBranch(branch_id));
-
     const interval = setInterval(() => {
       dispatch(fetchTablesByBranch(branch_id));
     }, 100);
@@ -95,10 +94,10 @@ export const TableProvider = ({ children }) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setGetTable(tables);
+      setGetTable(tableFlex);
     }, 100);
     return () => clearInterval(interval);
-  }, [tables]);
+  }, [tableFlex]);
 
   useEffect(() => {
     if (statu === "all") {

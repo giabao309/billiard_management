@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
   Table,
   TableBody,
   TableCell,
@@ -15,13 +7,34 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
-import { useGetViewInvoice } from "@/APIs/Manage";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchViewInvoices } from "@/Redux/invoices/invoices";
 
 export default function ClientInvoice() {
   const userID = localStorage.getItem("userID");
-  const { invoice } = useGetViewInvoice(userID);
+
+  const dispatch = useDispatch();
+  const invoice = useSelector((state) => state.invoices.invoicesView);
+
+  useEffect(() => {
+    dispatch(fetchViewInvoices(userID));
+    const interval = setInterval(() => {
+      dispatch(fetchViewInvoices(userID));
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [dispatch]);
+
+  const formatTime = (objTime) => {
+    const dateObj = new Date(objTime);
+    const formattedTime = dateObj.toLocaleTimeString("en-GB");
+    const formattedDate = dateObj.toLocaleDateString("en-GB");
+    return (
+      <span>
+        {formattedDate} {formattedTime}
+      </span>
+    );
+  };
 
   if (!invoice) {
     return "ko co hoa don";
@@ -63,39 +76,17 @@ export default function ClientInvoice() {
                 <TableCell className="py-2 px-4">{item.branch}</TableCell>
                 <TableCell className="py-2 px-4">{item.username}</TableCell>
                 <TableCell className="py-2 px-4">{item.table}</TableCell>
-                <TableCell className="py-2 px-4">{item.createDate}</TableCell>
+                <TableCell className="py-2 px-4">
+                  {formatTime(item.createDate)}
+                </TableCell>
                 <TableCell className="py-2 px-4">{item.promotion}</TableCell>
-                <TableCell className="py-2 px-4">{item.totalCost}</TableCell>
+                <TableCell className="py-2 px-4">
+                  {item.totalCost.toLocaleString()} VND
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-
-        {/* Pagination */}
-        {/* <Pagination className="mt-6">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={() => handlePageChange(currentPage - 1)}
-              />
-            </PaginationItem>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <PaginationItem key={i}>
-                <PaginationLink
-                  onClick={() => handlePageChange(i + 1)}
-                  isActive={currentPage === i + 1}
-                >
-                  {i + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => handlePageChange(currentPage + 1)}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination> */}
       </div>
     </div>
   );

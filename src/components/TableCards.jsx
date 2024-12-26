@@ -11,6 +11,7 @@ export default function TableCards() {
     tableFlex,
     selectedTableId,
     setSelectedTableId,
+    getTable,
   } = useContext(TableContext);
 
   const handleCardClick = (table) => {
@@ -20,8 +21,8 @@ export default function TableCards() {
 
   return (
     <div className="flex gap-6 max-w-[85%] max-h-[65vh] flex-wrap overflow-auto">
-      {tableFlex && tableFlex.length > 0 ? (
-        tableFlex.map((table) => {
+      {getTable && getTable.length > 0 ? (
+        getTable.map((table) => {
           let statusDot;
           if (table.status_id === 2) {
             statusDot = "#66CC66";
