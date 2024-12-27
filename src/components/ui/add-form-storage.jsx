@@ -1,133 +1,121 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { fetchServices, fetchCategories, createWarehouseItem } from "@/APIs/BilliardApi";
 import { Input } from "@/components/ui/input";
-import {
-    Select,
-    SelectTrigger,
-    SelectContent,
-    SelectItem,
-    SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-export default function AddStorage({ onClose }) {
+export default function AddStorage({ onClose, branchId, onAddSuccess }) {
+    const [formData, setFormData] = useState({
+        service_id: "",
+        category_id: "",
+        entry_price: "",
+        entry_quantity: "",
+    });
+
+    const [services, setServices] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const serviceData = await fetchServices();
+                const categoryData = await fetchCategories();
+                setServices(serviceData);
+                setCategories(categoryData);
+            } catch (error) {
+                console.error("Error fetching dropdown data:", error.message);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleChange = (key, value) => {
+        setFormData((prev) => ({ ...prev, [key]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            const dataToSend = { branch_id: branchId, ...formData };
+            await createWarehouseItem(dataToSend);
+            alert("Thêm sản phẩm thành công!");
+            onAddSuccess(); // Làm mới danh sách
+            onClose(); // Đóng form
+        } catch (error) {
+            console.error("Error adding item:", error.message);
+            alert("Đã xảy ra lỗi khi thêm sản phẩm!");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-lg">
-            {/* Header */}
-            <h3 className="text-2xl font-semibold mb-6 text-gray-700">
-                Thêm Sản Phẩm
-            </h3>
-
-            {/* Form */}
-            <form className="space-y-5">
-                {/* Mã */}
-                <div className="flex flex-col gap-2">
-                    <label
-                        htmlFor="maSanPham"
-                        className="text-sm font-medium text-gray-600"
-                    >
-                        Mã
-                    </label>
-                    <Input
-                        id="maSanPham"
-                        placeholder="Nhập mã sản phẩm"
-                        className="border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200"
-                    />
-                </div>
-
-                {/* Tên */}
-                <div className="flex flex-col gap-2">
-                    <label
-                        htmlFor="tenSanPham"
-                        className="text-sm font-medium text-gray-600"
-                    >
-                        Tên
-                    </label>
-                    <Input
-                        id="tenSanPham"
-                        placeholder="Nhập tên sản phẩm"
-                        className="border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200"
-                    />
-                </div>
-
-                {/* Loại thực đơn */}
-                <div className="flex flex-col gap-2">
-                    <label
-                        htmlFor="loaiThucDon"
-                        className="text-sm font-medium text-gray-600"
-                    >
-                        Loại thực đơn
-                    </label>
-                    <Select>
-                        <SelectTrigger className="border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200">
-                            <SelectValue placeholder="Chọn loại thực đơn" />
+            <h3 className="text-2xl font-semibold mb-6 text-gray-700">Thêm Sản Phẩm</h3>
+            <form onSubmit={handleSubmit} className="space-y-5">
+                <div>
+                    <label className="block text-sm font-medium">Tên sản phẩm</label>
+                    <Select onValueChange={(value) => handleChange("service_id", value)}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Chọn sản phẩm" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="food">Đồ ăn</SelectItem>
-                            <SelectItem value="drink">Thức uống</SelectItem>
-                            <SelectItem value="other">Khác</SelectItem>
+                            {services.map((service) => (
+                                <SelectItem key={service.service_id} value={service.service_id}>
+                                    {service.service_name}
+                                </SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </div>
 
-                {/* Giá vốn */}
-                <div className="flex flex-col gap-2">
-                    <label
-                        htmlFor="giaVon"
-                        className="text-sm font-medium text-gray-600"
-                    >
-                        Giá vốn
-                    </label>
-                    <Input
-                        id="giaVon"
-                        placeholder="Nhập giá vốn"
-                        className="border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200"
-                    />
+                <div>
+                    <label className="block text-sm font-medium">Loại thực đơn</label>
+                    <Select onValueChange={(value) => handleChange("category_id", value)}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Chọn loại thực đơn" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {categories.map((category) => (
+                                <SelectItem key={category.service_category_id} value={category.service_category_id}>
+                                    {category.service_category_name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
 
-                {/* Giá bán */}
-                <div className="flex flex-col gap-2">
-                    <label
-                        htmlFor="giaBan"
-                        className="text-sm font-medium text-gray-600"
-                    >
-                        Giá bán
-                    </label>
+                <div>
+                    <label className="block text-sm font-medium">Giá bán</label>
                     <Input
-                        id="giaBan"
+                        type="number"
                         placeholder="Nhập giá bán"
-                        className="border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200"
+                        value={formData.entry_price}
+                        onChange={(e) => handleChange("entry_price", e.target.value)}
+                        required
                     />
                 </div>
 
-                {/* Tồn kho */}
-                <div className="flex flex-col gap-2">
-                    <label
-                        htmlFor="tonKho"
-                        className="text-sm font-medium text-gray-600"
-                    >
-                        Tồn kho
-                    </label>
+                <div>
+                    <label className="block text-sm font-medium">Số lượng</label>
                     <Input
-                        id="tonKho"
-                        placeholder="Nhập số lượng tồn kho"
-                        className="border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200"
+                        type="number"
+                        placeholder="Nhập số lượng"
+                        value={formData.entry_quantity}
+                        onChange={(e) => handleChange("entry_quantity", e.target.value)}
+                        required
                     />
                 </div>
 
-                {/* Actions */}
-                <div className="flex justify-end gap-4 pt-4 border-t border-gray-200">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        className="border-gray-300 hover:bg-gray-100"
-                        onClick={onClose}
-                    >
+                <div className="flex justify-end gap-4">
+                    <Button onClick={onClose} type="button">
                         Hủy
                     </Button>
-                    <Button
-                        type="submit"
-                        className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600"
-                    >
+                    <Button type="submit" loading={loading}>
                         Lưu
                     </Button>
                 </div>

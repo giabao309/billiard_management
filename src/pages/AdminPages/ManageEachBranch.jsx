@@ -24,11 +24,7 @@ export default function ManageEachBranch() {
       label: "Quản lý bàn",
       icon: <AiOutlineTable className="text-xl mr-3" />,
     },
-    {
-      id: "floors",
-      label: "Quản lý lầu",
-      icon: <AiOutlineHome className="text-xl mr-3" />,
-    },
+
   ];
 
   return (
@@ -43,11 +39,10 @@ export default function ManageEachBranch() {
               <li key={item.id}>
                 <button
                   onClick={() => setActiveSection(item.id)}
-                  className={`flex items-center w-full text-left py-2 px-4 rounded-lg transition ${
-                    activeSection === item.id
+                  className={`flex items-center w-full text-left py-2 px-4 rounded-lg transition ${activeSection === item.id
                       ? "bg-gray-700 text-blue-300 font-semibold"
                       : "hover:bg-gray-700"
-                  }`}
+                    }`}
                 >
                   {item.icon}
                   <span>{item.label}</span>

@@ -208,3 +208,18 @@ export const searchWarehouseByServiceName = async (branchId, serviceName) => {
     throw error;
   }
 };
+
+export const createWarehouseItem = async (data) => {
+  const response = await axios.post("http://localhost:5000/api/storages/createStorage", data);
+  return response.data;
+};
+
+export const fetchServices = async () => {
+  const response = await axios.get("http://localhost:5000/api/storages/services");
+  return response.data;
+};
+
+export const fetchCategories = async () => {
+  const response = await axios.get("http://localhost:5000/api/storages/categories");
+  return response.data;
+};

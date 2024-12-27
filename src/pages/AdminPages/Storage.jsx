@@ -169,7 +169,7 @@ export default function Storage({ branchId }) {
                   {item.entry_quantity}
                 </TableCell>
                 <TableCell className="py-2 px-4 flex space-x-2">
-                  <DialogStorage triggerLabel="Chỉnh sửa" />
+
                   <Button
                     variant="outline"
                     className="bg-red-500 text-white hover:bg-red-600 flex items-center"
